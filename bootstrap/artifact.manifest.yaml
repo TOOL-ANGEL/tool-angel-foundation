@@ -1,0 +1,15 @@
+component:
+  id: BOOTSTRAP
+  name: Bootstrap Generator
+  version: 0.1.0
+  status: Draft
+
+artifacts:
+  - README.md
+  - generator.py
+
+outputs:
+  - project_structure
+  - specifications
+  - schemas
+  - github_workflows
