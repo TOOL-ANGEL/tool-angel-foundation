@@ -1,0 +1,24 @@
+component: GC-01
+
+name: Entity
+
+version: 1.0.0
+
+status: Draft
+
+requirements:
+
+  - id: REQ-ENTITY-001
+    description: Every Entity shall have a globally unique identifier.
+
+  - id: REQ-ENTITY-002
+    description: Every Entity shall have a human-readable name.
+
+  - id: REQ-ENTITY-003
+    description: Description is optional.
+
+  - id: REQ-ENTITY-004
+    description: Entity identifiers shall never change after creation.
+
+  - id: REQ-ENTITY-005
+    description: Entity shall support future lifecycle metadata.
