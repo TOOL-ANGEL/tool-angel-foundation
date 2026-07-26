@@ -1,0 +1,43 @@
+name: Specification Template
+
+id: SPEC-XXXX
+
+version: 1.0.0
+
+status: Draft
+
+purpose: ""
+
+inputs: []
+
+outputs: []
+
+constraints: []
+
+invariants: []
+
+interfaces: []
+
+lifecycle:
+
+  create:
+
+  validate:
+
+  execute:
+
+  verify:
+
+  certify:
+
+traceability:
+
+  requirements: []
+
+  schemas: []
+
+  tests: []
+
+  evidence: []
+
+author: TOOL-ANGEL Foundation
