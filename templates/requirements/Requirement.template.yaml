@@ -1,0 +1,23 @@
+id: REQ-XXXX-001
+
+title: ""
+
+description: ""
+
+priority: High
+
+status: Draft
+
+verification:
+
+  - Unit Test
+
+traceability:
+
+  specification: ""
+
+  implementation: ""
+
+  evidence: ""
+
+  certificate: ""
