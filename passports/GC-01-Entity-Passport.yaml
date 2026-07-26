@@ -1,0 +1,63 @@
+component: GC-01
+
+name: Entity
+
+version: 1.0.0
+
+status: Certified
+
+classification: Golden Component
+
+owner: TOOL-ANGEL Foundation
+
+created: 2026
+
+artifacts:
+
+  adr:
+    - ADR-0001-Foundation-Frozen.md
+
+  requirements:
+    - entity.requirements.yaml
+
+  specification:
+    - entity.spec.yaml
+
+  schema:
+    - entity.schema.json
+
+  implementation:
+    - src/tool_angel/model/entity.py
+
+  tests:
+    - tests/test_entity.py
+
+  evidence:
+    - GC-01-Entity-Evidence.md
+
+  certificate:
+    - GC-01-Entity-Certificate.md
+
+dependencies: []
+
+dependents: []
+
+compatibility:
+
+  foundation: "1.0"
+
+traceability:
+
+  requirements: true
+
+  specification: true
+
+  schema: true
+
+  implementation: true
+
+  tests: true
+
+  evidence: true
+
+  certification: true
