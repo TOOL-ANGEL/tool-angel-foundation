@@ -1,0 +1,69 @@
+component: GC-01
+
+name: Entity
+
+version: 1.0.0
+
+status: Draft
+
+interfaces:
+
+  constructor:
+    parameters:
+
+      id:
+        type: UUID
+        required: true
+
+      name:
+        type: string
+        required: true
+
+      description:
+        type: string
+        required: false
+
+properties:
+
+  id:
+    immutable: true
+
+  name:
+    mutable: true
+
+  description:
+    mutable: true
+
+operations:
+
+  create:
+
+    output: Entity
+
+  update_name:
+
+    input: string
+
+  update_description:
+
+    input: string
+
+constraints:
+
+  - id must be unique
+
+  - id cannot change
+
+  - name cannot be empty
+
+future_extensions:
+
+  - lifecycle
+
+  - metadata
+
+  - relationships
+
+  - certificates
+
+  - passports
