@@ -1,0 +1,34 @@
+passport:
+  id: COMPONENT-ID
+  name: COMPONENT-NAME
+  version: 1.0.0
+
+  lifecycle:
+    status: draft
+
+  owner:
+    organization: TOOL-ANGEL Foundation
+
+  requirements:
+    - requirements/component.requirements.yaml
+
+  specifications:
+    - specs/component.spec.yaml
+
+  schemas:
+    - schemas/component.schema.json
+
+  tests:
+    - tests/test_component.py
+
+  evidence:
+    - evidence/component-evidence.md
+
+  certificates:
+    - certificates/component-certificate.md
+
+  traceability:
+    enabled: true
+
+  digital_fingerprint:
+    sha256: ""
