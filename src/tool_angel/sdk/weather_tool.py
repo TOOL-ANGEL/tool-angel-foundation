@@ -2,6 +2,7 @@
 Weather Tool Example.
 """
 
+from tool_angel.manifest import ToolManifest
 from tool_angel.sdk.action import Action
 from tool_angel.sdk.capability import Capability
 from tool_angel.sdk.response import Response
@@ -39,4 +40,15 @@ class WeatherTool(Tool):
                 "temperature": 24,
                 "condition": "Sunny"
             }
+        )
+
+    def manifest(self):
+
+        return ToolManifest(
+            name=self.name,
+            version=self.version,
+            description=self.description,
+            author="AngelOS",
+            actions=self.actions,
+            capabilities=self.capabilities,
         )
