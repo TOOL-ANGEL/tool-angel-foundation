@@ -1,22 +1,31 @@
 """
-AngelOS Kernel
+AngelOS Kernel.
 """
 
-from tool_angel.config import Config
-from tool_angel.registry import Registry
+from tool_angel.runtime.engine import RuntimeEngine
 
 
 class Kernel:
-    """Main AngelOS kernel."""
+    """AngelOS execution kernel."""
 
-    def __init__(self, config: Config | None = None):
-        self.config = config or Config()
-        self.registry = Registry()
+    def __init__(self):
+        self.runtime = RuntimeEngine()
+        self.started = False
 
-    def start(self) -> None:
+    def start(self):
         """Start the kernel."""
+        self.started = True
         print("AngelOS Kernel started.")
 
-    def stop(self) -> None:
+    def stop(self):
         """Stop the kernel."""
+        self.started = False
         print("AngelOS Kernel stopped.")
+
+    def register(self, tool):
+        """Register a tool in the runtime."""
+        self.runtime.register(tool)
+
+    def execute(self, tool_name: str, **kwargs):
+        """Execute a tool."""
+        return self.runtime.execute(tool_name, **kwargs)
