@@ -1,18 +1,16 @@
 """
-Weather Plugin.
+AngelOS Weather Plugin.
 """
 
-from tool_angel.plugins.base import Plugin
+from tool_angel.plugins.base import BasePlugin
 
 
-class WeatherPlugin(Plugin):
-    """Example weather plugin."""
+class WeatherPlugin(BasePlugin):
+    """
+    Built-in Weather Plugin.
+    """
 
     name = "weather"
-
     version = "0.1.0"
-
-    description = "Example weather plugin."
-
-    def run(self) -> None:
-        print("Weather plugin executed.")
+    author = "AngelOS"
+    description = "Built-in weather plugin."

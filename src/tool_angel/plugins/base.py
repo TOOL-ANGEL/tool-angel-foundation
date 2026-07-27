@@ -1,18 +1,26 @@
 """
-Base Plugin class for AngelOS.
+AngelOS Plugin Base.
 """
 
-from abc import ABC, abstractmethod
+from abc import ABC
 
 
-class Plugin(ABC):
-    """Base class for every AngelOS plugin."""
+class BasePlugin(ABC):
+    """
+    Base class for every AngelOS plugin.
+    """
 
-    name: str = "plugin"
-    version: str = "0.1.0"
-    description: str = ""
+    name = ""
+    version = "0.1.0"
+    author = ""
+    description = ""
+    enabled = True
 
-    @abstractmethod
-    def run(self) -> None:
-        """Execute the plugin."""
-        raise NotImplementedError
+    def enable(self):
+        self.enabled = True
+
+    def disable(self):
+        self.enabled = False
+
+    def is_enabled(self):
+        return self.enabled

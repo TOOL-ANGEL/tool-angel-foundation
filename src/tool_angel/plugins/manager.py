@@ -1,24 +1,33 @@
 """
-Plugin Manager for AngelOS.
+AngelOS Plugin Manager.
 """
 
-from tool_angel.plugins.base import Plugin
+from tool_angel.plugins.base import BasePlugin
 
 
 class PluginManager:
-    """Manage AngelOS plugins."""
 
-    def __init__(self) -> None:
-        self._plugins: dict[str, Plugin] = {}
+    def __init__(self):
 
-    def register(self, plugin: Plugin) -> None:
-        """Register a plugin."""
+        self._plugins = {}
+
+    def register(self, plugin: BasePlugin):
+
         self._plugins[plugin.name] = plugin
 
-    def get(self, name: str) -> Plugin | None:
-        """Return a plugin by name."""
+    def get(self, name: str):
+
         return self._plugins.get(name)
 
-    def list(self) -> list[str]:
-        """Return all registered plugin names."""
+    def list(self):
+
         return sorted(self._plugins.keys())
+
+    def remove(self, name: str):
+
+        if name in self._plugins:
+            del self._plugins[name]
+
+    def clear(self):
+
+        self._plugins.clear()
