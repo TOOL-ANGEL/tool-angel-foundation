@@ -1,22 +1,27 @@
 """
-Tool Manifest definition.
+AngelOS Tool Manifest.
 """
 
 from dataclasses import dataclass, field
+from typing import List
 
 
-@dataclass(frozen=True)
+@dataclass
 class ToolManifest:
-    """Describes a Tool."""
+    """
+    Describes a plugin/tool manifest.
+    """
 
     name: str
 
-    version: str = "1.0.0"
+    version: str
 
-    description: str = ""
+    author: str
 
-    author: str = ""
+    description: str
 
-    actions: list = field(default_factory=list)
+    entry: str
 
-    capabilities: list = field(default_factory=list)
+    permissions: List[str] = field(default_factory=list)
+
+    commands: List[str] = field(default_factory=list)

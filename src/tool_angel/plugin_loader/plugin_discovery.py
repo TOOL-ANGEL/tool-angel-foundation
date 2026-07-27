@@ -1,16 +1,36 @@
 """
-Plugin Discovery.
+AngelOS Plugin Discovery.
 """
 
-from tool_angel.plugins.weather import WeatherPlugin
+from pathlib import Path
 
 
 class PluginDiscovery:
     """
-    Discover installed plugins.
+    Discovers installed plugins.
     """
 
+    def __init__(self):
+
+        self.plugins_path = (
+            Path(__file__)
+            .parent.parent
+            / "plugins"
+        )
+
     def discover(self):
-        return [
-            WeatherPlugin()
-        ]
+        """
+        Discover plugin directories.
+
+        Placeholder implementation.
+        """
+
+        plugins = []
+
+        for directory in self.plugins_path.iterdir():
+
+            if directory.is_dir():
+
+                plugins.append(directory)
+
+        return plugins

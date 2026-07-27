@@ -5,7 +5,7 @@ AngelOS Runtime Engine.
 from tool_angel.runtime.registry import ToolRegistry
 from tool_angel.runtime.executor import RuntimeExecutor
 
-from tool_angel.plugin_kernel.kernel import PluginKernel
+from tool_angel.plugin_loader.plugin_loader import PluginLoader
 
 from tool_angel.commands.registry import CommandRegistry
 from tool_angel.commands.discovery import CommandDiscovery
@@ -38,7 +38,8 @@ class RuntimeEngine:
             self.registry
         )
 
-        self.kernel = PluginKernel()
+        # Nuevo Plugin Loader
+        self.plugin_loader = PluginLoader()
 
         # -------------------------------------------------
         # Command Runtime
@@ -66,7 +67,7 @@ class RuntimeEngine:
         Automatically load all plugins.
         """
 
-        manager = self.kernel.load()
+        manager = self.plugin_loader.load()
 
         for plugin_name in manager.list():
 
