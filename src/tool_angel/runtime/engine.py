@@ -4,7 +4,8 @@ AngelOS Runtime Engine.
 
 from tool_angel.runtime.registry import ToolRegistry
 from tool_angel.runtime.executor import RuntimeExecutor
-from tool_angel.loaders.tool_loader import ToolLoader
+
+from tool_angel.plugin_kernel.kernel import PluginKernel
 
 
 class RuntimeEngine:
@@ -16,7 +17,7 @@ class RuntimeEngine:
 
         self.executor = RuntimeExecutor(self.registry)
 
-        self.loader = ToolLoader()
+        self.kernel = PluginKernel()
 
     def register(self, tool):
 
@@ -25,9 +26,13 @@ class RuntimeEngine:
     def load_tools(self):
         """Automatically load all SDK tools."""
 
-        for tool in self.loader.discover():
+        manager = self.kernel.load()
 
-            self.register(tool)
+        for plugin_name in manager.list():
+
+            plugin = manager.get(plugin_name)
+
+            self.register(plugin)
 
     def execute(self, tool_name: str, **kwargs):
 
