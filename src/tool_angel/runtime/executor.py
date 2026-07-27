@@ -7,18 +7,32 @@ from tool_angel.sdk.response import Response
 
 
 class RuntimeExecutor:
-    """Executes registered tools."""
+    """
+    Executes registered plugins.
+    """
 
     def __init__(self, registry: ToolRegistry):
         self.registry = registry
 
-    def execute(self, tool_name: str, **kwargs) -> Response:
+    def execute(
+        self,
+        tool_name: str,
+        *args,
+        **kwargs
+    ) -> Response:
+        """
+        Execute a registered plugin.
+        """
+
         tool = self.registry.get(tool_name)
 
         if tool is None:
             return Response(
                 success=False,
-                message=f"Tool '{tool_name}' not found."
+                message=f"Plugin '{tool_name}' not found."
             )
 
-        return tool.execute(**kwargs)
+        return tool.execute(
+            *args,
+            **kwargs
+        )

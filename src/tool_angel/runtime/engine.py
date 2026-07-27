@@ -15,27 +15,56 @@ from tool_angel.builtin_commands.plugin import PluginCommand
 
 
 class RuntimeEngine:
-    """Runtime Engine."""
+    """
+    AngelOS Runtime Engine.
+
+    Responsible for:
+
+    - Loading plugins
+    - Loading commands
+    - Executing commands
+    - Executing plugins
+    """
 
     def __init__(self):
 
-        # Herramientas / Plugins
+        # -------------------------------------------------
+        # Plugin Runtime
+        # -------------------------------------------------
+
         self.registry = ToolRegistry()
-        self.executor = RuntimeExecutor(self.registry)
+
+        self.executor = RuntimeExecutor(
+            self.registry
+        )
+
         self.kernel = PluginKernel()
 
-        # Comandos
+        # -------------------------------------------------
+        # Command Runtime
+        # -------------------------------------------------
+
         self.command_registry = CommandRegistry()
+
         self.command_dispatcher = CommandDispatcher(
             self.command_registry
         )
 
+    # -------------------------------------------------
+    # Plugins
+    # -------------------------------------------------
+
     def register(self, tool):
-        """Register a plugin."""
+        """
+        Register a plugin.
+        """
+
         self.registry.register(tool)
 
     def load_tools(self):
-        """Load plugins."""
+        """
+        Automatically load all plugins.
+        """
 
         manager = self.kernel.load()
 
@@ -45,33 +74,63 @@ class RuntimeEngine:
 
             self.register(plugin)
 
-    def load_commands(self):
-        """Load built-in commands."""
+    # -------------------------------------------------
+    # Commands
+    # -------------------------------------------------
 
-        # Registrar comandos descubiertos automáticamente
+    def load_commands(self):
+        """
+        Load all built-in commands.
+        """
+
         commands = CommandDiscovery().discover()
 
         for command in commands:
 
             self.command_registry.register(command)
 
-        # Registrar PluginCommand
+        # Register plugin command
+
         self.command_registry.register(
             PluginCommand(self)
         )
 
-    def execute_command(self, command_name: str, **kwargs):
-        """Execute a command."""
+    # -------------------------------------------------
+    # Execute Commands
+    # -------------------------------------------------
+
+    def execute_command(
+        self,
+        command_name: str,
+        *args,
+        **kwargs
+    ):
+        """
+        Execute a command.
+        """
 
         return self.command_dispatcher.dispatch(
             command_name,
+            *args,
             **kwargs
         )
 
-    def execute(self, tool_name: str, **kwargs):
-        """Execute a plugin."""
+    # -------------------------------------------------
+    # Execute Plugins
+    # -------------------------------------------------
+
+    def execute(
+        self,
+        tool_name: str,
+        *args,
+        **kwargs
+    ):
+        """
+        Execute a plugin.
+        """
 
         return self.executor.execute(
             tool_name,
+            *args,
             **kwargs
         )
