@@ -3,7 +3,6 @@ AngelOS Tool Manifest.
 """
 
 from dataclasses import dataclass, field
-from typing import List
 
 
 @dataclass
@@ -22,6 +21,6 @@ class ToolManifest:
 
     entry: str
 
-    permissions: List[str] = field(default_factory=list)
+    permissions: list[str] = field(default_factory=list)
 
-    commands: List[str] = field(default_factory=list)
+    commands: list[str] = field(default_factory=list)

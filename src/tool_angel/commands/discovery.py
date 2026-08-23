@@ -14,9 +14,6 @@ class CommandDiscovery:
     def discover(self):
 
         return [
-
             HelpCommand(),
-
             VersionCommand(),
-
         ]

@@ -2,16 +2,13 @@
 AngelOS Runtime Engine.
 """
 
-from tool_angel.runtime.registry import ToolRegistry
-from tool_angel.runtime.executor import RuntimeExecutor
-
-from tool_angel.plugin_loader.plugin_loader import PluginLoader
-
-from tool_angel.commands.registry import CommandRegistry
+from tool_angel.builtin_commands.plugin import PluginCommand
 from tool_angel.commands.discovery import CommandDiscovery
 from tool_angel.commands.dispatcher import CommandDispatcher
-
-from tool_angel.builtin_commands.plugin import PluginCommand
+from tool_angel.commands.registry import CommandRegistry
+from tool_angel.plugin_loader.plugin_loader import PluginLoader
+from tool_angel.runtime.executor import RuntimeExecutor
+from tool_angel.runtime.registry import ToolRegistry
 
 
 class RuntimeEngine:
@@ -34,9 +31,7 @@ class RuntimeEngine:
 
         self.registry = ToolRegistry()
 
-        self.executor = RuntimeExecutor(
-            self.registry
-        )
+        self.executor = RuntimeExecutor(self.registry)
 
         # Nuevo Plugin Loader
         self.plugin_loader = PluginLoader()
@@ -47,9 +42,7 @@ class RuntimeEngine:
 
         self.command_registry = CommandRegistry()
 
-        self.command_dispatcher = CommandDispatcher(
-            self.command_registry
-        )
+        self.command_dispatcher = CommandDispatcher(self.command_registry)
 
     # -------------------------------------------------
     # Plugins
@@ -92,46 +85,26 @@ class RuntimeEngine:
 
         # Register plugin command
 
-        self.command_registry.register(
-            PluginCommand(self)
-        )
+        self.command_registry.register(PluginCommand(self))
 
     # -------------------------------------------------
     # Execute Commands
     # -------------------------------------------------
 
-    def execute_command(
-        self,
-        command_name: str,
-        *args,
-        **kwargs
-    ):
+    def execute_command(self, command_name: str, *args, **kwargs):
         """
         Execute a command.
         """
 
-        return self.command_dispatcher.dispatch(
-            command_name,
-            *args,
-            **kwargs
-        )
+        return self.command_dispatcher.dispatch(command_name, *args, **kwargs)
 
     # -------------------------------------------------
     # Execute Plugins
     # -------------------------------------------------
 
-    def execute(
-        self,
-        tool_name: str,
-        *args,
-        **kwargs
-    ):
+    def execute(self, tool_name: str, *args, **kwargs):
         """
         Execute a plugin.
         """
 
-        return self.executor.execute(
-            tool_name,
-            *args,
-            **kwargs
-        )
+        return self.executor.execute(tool_name, *args, **kwargs)

@@ -1,1 +1,1 @@
-from .manifest import ToolManifest
+from .manifest import ToolManifest as ToolManifest

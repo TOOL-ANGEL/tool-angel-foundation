@@ -14,12 +14,7 @@ class RuntimeExecutor:
     def __init__(self, registry: ToolRegistry):
         self.registry = registry
 
-    def execute(
-        self,
-        tool_name: str,
-        *args,
-        **kwargs
-    ) -> Response:
+    def execute(self, tool_name: str, *args, **kwargs) -> Response:
         """
         Execute a registered plugin.
         """
@@ -27,12 +22,6 @@ class RuntimeExecutor:
         tool = self.registry.get(tool_name)
 
         if tool is None:
-            return Response(
-                success=False,
-                message=f"Plugin '{tool_name}' not found."
-            )
+            return Response(success=False, message=f"Plugin '{tool_name}' not found.")
 
-        return tool.execute(
-            *args,
-            **kwargs
-        )
+        return tool.execute(*args, **kwargs)

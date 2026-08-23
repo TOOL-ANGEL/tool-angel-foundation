@@ -31,7 +31,4 @@ class WeatherPlugin(BasePlugin):
             for key, value in kwargs.items():
                 print(f" - {key}: {value}")
 
-        return {
-            "plugin": self.name,
-            "status": "ok"
-        }
+        return {"plugin": self.name, "status": "ok"}

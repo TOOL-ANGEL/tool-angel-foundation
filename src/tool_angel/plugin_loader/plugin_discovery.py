@@ -12,11 +12,7 @@ class PluginDiscovery:
 
     def __init__(self):
 
-        self.plugins_path = (
-            Path(__file__)
-            .parent.parent
-            / "plugins"
-        )
+        self.plugins_path = Path(__file__).parent.parent / "plugins"
 
     def discover(self):
         """

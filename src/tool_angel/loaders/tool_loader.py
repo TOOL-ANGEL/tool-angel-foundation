@@ -2,9 +2,9 @@
 Automatic Tool Loader.
 """
 
-from pathlib import Path
 import importlib
 import inspect
+from pathlib import Path
 
 from tool_angel.sdk.tool import Tool
 

@@ -28,11 +28,7 @@ def main():
 
         plugin_args = sys.argv[3:]
 
-        app.engine.execute_command(
-            "plugin",
-            plugin_name,
-            *plugin_args
-        )
+        app.engine.execute_command("plugin", plugin_name, *plugin_args)
 
         return
 

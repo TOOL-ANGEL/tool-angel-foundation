@@ -2,8 +2,6 @@
 AngelOS Manifest Discovery.
 """
 
-from pathlib import Path
-
 
 class ManifestDiscovery:
     """

@@ -2,9 +2,9 @@
 Plugin Kernel.
 """
 
-from tool_angel.plugin_loader.plugin_loader import PluginLoader
 from tool_angel.plugin_kernel.context import PluginContext
 from tool_angel.plugin_kernel.lifecycle import PluginLifecycle
+from tool_angel.plugin_loader.plugin_loader import PluginLoader
 
 
 class PluginKernel:

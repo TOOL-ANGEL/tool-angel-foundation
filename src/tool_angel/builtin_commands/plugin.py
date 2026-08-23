@@ -49,8 +49,4 @@ class PluginCommand(Command):
             for key, value in kwargs.items():
                 print(f" - {key}: {value}")
 
-        return self.runtime.execute(
-            plugin_name,
-            *plugin_args,
-            **kwargs
-        )
+        return self.runtime.execute(plugin_name, *plugin_args, **kwargs)

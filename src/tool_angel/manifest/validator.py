@@ -37,9 +37,7 @@ class ManifestValidator:
             if value is None:
                 return False
 
-            if isinstance(value, str):
-
-                if not value.strip():
-                    return False
+            if isinstance(value, str) and not value.strip():
+                return False
 
         return True

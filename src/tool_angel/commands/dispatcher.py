@@ -13,12 +13,7 @@ class CommandDispatcher:
     def __init__(self, registry: CommandRegistry):
         self.registry = registry
 
-    def dispatch(
-        self,
-        command_name: str,
-        *args,
-        **kwargs
-    ):
+    def dispatch(self, command_name: str, *args, **kwargs):
         """
         Dispatch a command to its implementation.
         """
@@ -26,11 +21,6 @@ class CommandDispatcher:
         command = self.registry.get(command_name)
 
         if command is None:
-            raise ValueError(
-                f"Unknown command: {command_name}"
-            )
+            raise ValueError(f"Unknown command: {command_name}")
 
-        return command.execute(
-            *args,
-            **kwargs
-        )
+        return command.execute(*args, **kwargs)

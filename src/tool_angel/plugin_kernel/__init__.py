@@ -2,6 +2,6 @@
 AngelOS Plugin Kernel.
 """
 
-from .kernel import PluginKernel
-from .context import PluginContext
-from .lifecycle import PluginLifecycle
+from .context import PluginContext as PluginContext
+from .kernel import PluginKernel as PluginKernel
+from .lifecycle import PluginLifecycle as PluginLifecycle
