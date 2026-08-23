@@ -8,7 +8,7 @@ from tool_angel.sdk.tool import Tool
 class ToolRegistry:
     """Registry of runtime tools."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._tools: dict[str, Tool] = {}
 
     def register(self, tool: Tool) -> None:
