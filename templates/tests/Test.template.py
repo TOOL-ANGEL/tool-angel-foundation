@@ -2,8 +2,6 @@
 TOOL-ANGEL Test Template
 """
 
-import pytest
-
 
 def test_component_creation():
     """Component should be created successfully."""
