@@ -123,3 +123,54 @@ def test_complex_system_add_relationship():
 
     assert len(system.relationships) == 1
     assert system.relationships[0] == relationship
+
+
+def test_complex_system_full_model():
+    system = ComplexSystem(
+        name="Sistema Territorial de Segovia",
+        description="Modelo integrado de sistema complejo territorial",
+    )
+
+    component_a = {
+        "name": "Acueducto",
+        "type": "infraestructura",
+    }
+
+    component_b = {
+        "name": "Población",
+        "type": "social",
+    }
+
+    system.add_component(component_a)
+    system.add_component(component_b)
+
+    state = SystemState.create(
+        name="Operativo",
+        value=1.0,
+    )
+
+    indicator = Indicator.create(
+        name="Índice de resiliencia territorial",
+        value=0.85,
+        unit="index",
+    )
+
+    system.add_state(state)
+    system.add_indicator(indicator)
+
+    relationship = Relationship.create(
+        source_id=state.id,
+        target_id=indicator.id,
+        relationship_type="influences",
+        weight=0.8,
+    )
+
+    system.add_relationship(relationship)
+
+    summary = system.summary()
+
+    assert summary["name"] == "Sistema Territorial de Segovia"
+    assert summary["components"] == 2
+    assert summary["states"] == 1
+    assert summary["indicators"] == 1
+    assert summary["relationships"] == 1
