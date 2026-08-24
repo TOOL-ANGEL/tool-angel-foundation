@@ -84,3 +84,42 @@ def test_complex_system_with_models():
     assert summary["indicators"] == 1
     assert summary["components"] == 0
     assert summary["relationships"] == 0
+
+
+def test_complex_system_add_component():
+    system = ComplexSystem(
+        name="Sistema Territorial de Segovia",
+        description="Modelo inicial de sistema complejo territorial",
+    )
+
+    component = {
+        "name": "Acueducto",
+        "type": "infraestructura",
+    }
+
+    system.add_component(component)
+
+    assert len(system.components) == 1
+    assert system.components[0] == component
+
+
+def test_complex_system_add_relationship():
+    system = ComplexSystem(
+        name="Sistema Territorial de Segovia",
+        description="Modelo inicial de sistema complejo territorial",
+    )
+
+    source_id = uuid4()
+    target_id = uuid4()
+
+    relationship = Relationship.create(
+        source_id=source_id,
+        target_id=target_id,
+        relationship_type="depends_on",
+        weight=0.8,
+    )
+
+    system.add_relationship(relationship)
+
+    assert len(system.relationships) == 1
+    assert system.relationships[0] == relationship
