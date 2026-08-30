@@ -1,7 +1,3 @@
-"""
-AngelOS CLI Entry Point.
-"""
-
 import sys
 
 from tool_angel.cli.app import CLIApplication
@@ -19,21 +15,37 @@ def main():
 
     # Comando: plugin
     if command == "plugin":
-
         if len(sys.argv) < 3:
-            app.engine.execute_command("plugin")
+            result = app.engine.execute_command("plugin")
+            print(result)
             return
 
         plugin_name = sys.argv[2]
-
         plugin_args = sys.argv[3:]
 
-        app.engine.execute_command("plugin", plugin_name, *plugin_args)
+        kwargs = {}
+        args = []
 
+        for item in plugin_args:
+            if "=" in item:
+                key, value = item.split("=", 1)
+                kwargs[key] = value
+            else:
+                args.append(item)
+
+        result = app.engine.execute_command(
+            "plugin",
+            plugin_name,
+            *args,
+            **kwargs,
+        )
+
+        print(result)
         return
 
     # Resto de comandos
-    app.engine.execute_command(command)
+    result = app.engine.execute_command(command)
+    print(result)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,7 @@
+name: weather
+version: "0.1.0"
+author: AngelOS
+description: Built-in weather plugin.
+entry: tool_angel.plugins.weather:WeatherPlugin
+permissions: []
+commands: []

@@ -15,13 +15,10 @@ class PluginLifecycle:
     STOPPED = "stopped"
 
     def __init__(self):
-
         self.state = self.CREATED
 
     def set_state(self, state):
-
         self.state = state
 
     def get_state(self):
-
         return self.state

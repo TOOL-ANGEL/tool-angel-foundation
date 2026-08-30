@@ -13,19 +13,12 @@ class PluginKernel:
     """
 
     def __init__(self):
-
         self.loader = PluginLoader()
-
         self.manager = None
-
         self.context = PluginContext()
-
         self.lifecycle = PluginLifecycle()
 
     def load(self):
-
         self.manager = self.loader.load()
-
         self.lifecycle.set_state(PluginLifecycle.LOADED)
-
         return self.manager
