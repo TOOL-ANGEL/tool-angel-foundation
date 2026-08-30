@@ -194,3 +194,10 @@ def test_complex_system_full_model():
     assert summary["states"] == 1
     assert summary["indicators"] == 1
     assert summary["relationships"] == 1
+
+
+def test_complex_system_name_cannot_be_empty():
+    import pytest
+
+    with pytest.raises(ValueError):
+        ComplexSystem(name="")
