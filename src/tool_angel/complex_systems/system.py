@@ -33,6 +33,9 @@ class ComplexSystem:
             description: Description of the system.
         """
 
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError("name cannot be empty")
+
         self.name = name
         self.description = description
 
