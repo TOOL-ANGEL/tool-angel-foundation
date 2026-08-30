@@ -10,7 +10,7 @@ class ManifestDiscovery:
 
     def discover(self, plugin_directories):
         """
-        Search for manifest.yaml in each plugin directory.
+        Search for manifest.yaml files in plugin directories.
         """
 
         manifests = []
@@ -19,7 +19,7 @@ class ManifestDiscovery:
 
             manifest = directory / "manifest.yaml"
 
-            if manifest.exists():
+            if manifest.is_file():
 
                 manifests.append(manifest)
 
