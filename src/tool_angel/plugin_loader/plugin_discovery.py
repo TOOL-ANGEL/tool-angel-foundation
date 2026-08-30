@@ -16,16 +16,14 @@ class PluginDiscovery:
 
     def discover(self):
         """
-        Discover plugin directories.
-
-        Placeholder implementation.
+        Discover plugin directories containing a manifest.yaml file.
         """
 
         plugins = []
 
         for directory in self.plugins_path.iterdir():
 
-            if directory.is_dir():
+            if directory.is_dir() and (directory / "manifest.yaml").is_file():
 
                 plugins.append(directory)
 
