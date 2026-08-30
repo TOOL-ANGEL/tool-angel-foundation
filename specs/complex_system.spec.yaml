@@ -1,0 +1,121 @@
+component: CS-01
+
+name: ComplexSystem
+
+version: 1.0.0
+
+status: Draft
+
+purpose:
+  description: >
+    Represent a complex system as an integrated structure composed of
+    components, relationships, states and indicators.
+
+interfaces:
+
+  constructor:
+    parameters:
+
+      name:
+        type: string
+        required: true
+
+      description:
+        type: string
+        required: false
+
+  add_component:
+    input:
+      type: Component
+      required: true
+
+  add_relationship:
+    input:
+      type: Relationship
+      required: true
+
+  add_state:
+    input:
+      type: SystemState
+      required: true
+
+  add_indicator:
+    input:
+      type: Indicator
+      required: true
+
+  summary:
+    output:
+      type: dictionary
+
+properties:
+
+  name:
+    type: string
+    mutable: true
+
+  description:
+    type: string
+    mutable: true
+
+  components:
+    type: list[Component]
+
+  relationships:
+    type: list[Relationship]
+
+  states:
+    type: list[SystemState]
+
+  indicators:
+    type: list[Indicator]
+
+operations:
+
+  add_component:
+    description: >
+      Add a component to the complex system.
+
+  add_relationship:
+    description: >
+      Add a relationship between entities represented in the system.
+
+  add_state:
+    description: >
+      Add an observed or defined system state.
+
+  add_indicator:
+    description: >
+      Add an indicator used to measure system behavior.
+
+  summary:
+    description: >
+      Return an aggregated structural summary of the system.
+
+constraints:
+
+  - name cannot be empty
+  - components must contain Component instances
+  - relationships must contain Relationship instances
+  - states must contain SystemState instances
+  - indicators must contain Indicator instances
+
+invariants:
+
+  - components count equals len(components)
+  - relationships count equals len(relationships)
+  - states count equals len(states)
+  - indicators count equals len(indicators)
+
+future_extensions:
+
+  - lifecycle
+  - dynamics
+  - causal relationships
+  - temporal evolution
+  - system validation
+  - resilience analysis
+  - emergent behavior
+  - dependency graphs
+  - certificates
+  - passports
