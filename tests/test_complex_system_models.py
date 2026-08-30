@@ -2,6 +2,7 @@ from uuid import uuid4
 
 from tool_angel.complex_systems import (
     ComplexSystem,
+    Component,
     Indicator,
     Relationship,
     SystemState,
@@ -54,6 +55,25 @@ def test_indicator_create():
     assert indicator.description == "Indicador de prueba"
     assert indicator.metadata["source"] == "test"
     assert indicator.id is not None
+
+
+def test_component_create():
+    component = Component.create(
+        name="Acueducto",
+        type="infraestructura",
+        description="Infraestructura histórica y territorial",
+        metadata={
+            "location": "Segovia",
+            "role": "patrimonio",
+        },
+    )
+
+    assert component.name == "Acueducto"
+    assert component.type == "infraestructura"
+    assert component.description == "Infraestructura histórica y territorial"
+    assert component.metadata["location"] == "Segovia"
+    assert component.metadata["role"] == "patrimonio"
+    assert component.id is not None
 
 
 def test_complex_system_with_models():
