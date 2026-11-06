@@ -112,10 +112,10 @@ def test_complex_system_add_component():
         description="Modelo inicial de sistema complejo territorial",
     )
 
-    component = {
-        "name": "Acueducto",
-        "type": "infraestructura",
-    }
+    component = Component.create(
+        name="Acueducto",
+        type="infraestructura",
+    )
 
     system.add_component(component)
 
@@ -151,15 +151,9 @@ def test_complex_system_full_model():
         description="Modelo integrado de sistema complejo territorial",
     )
 
-    component_a = {
-        "name": "Acueducto",
-        "type": "infraestructura",
-    }
+    component_a = Component.create(name="Acueducto", type="infraestructura")
 
-    component_b = {
-        "name": "Población",
-        "type": "social",
-    }
+    component_b = Component.create(name="Población", type="social")
 
     system.add_component(component_a)
     system.add_component(component_b)
