@@ -1,0 +1,86 @@
+component: CS-02
+
+name: EcosystemAnalysis
+
+version: 0.1.0
+
+status: Draft
+
+depends_on:
+  - CS-01 ComplexSystem
+
+purpose:
+  description: >
+    Measure the transition of a complex system from a closed solution to an
+    ecosystem, following the model S = (V, E, w, A, ω, F, Θ).
+
+model_mapping:
+
+  V: ComplexSystem.components (Component)
+  V_ext: components with scope == "external"
+  E: relationships whose relationship_type is in DEPENDENCY_TYPES
+  w: Relationship.weight
+  A: ComplexSystem.actors (Actor)
+  ω: Component.owner_id
+  F: ComplexSystem.value_functions (ValueFunction)
+  Θ: Component.availability (A), Component.control (γ), Component.failure_rate (λ)
+
+conventions:
+  dependency_direction: (i, j) ∈ E means i depends on j
+  DEPENDENCY_TYPES: ["depends_on"]
+  path_element: a component id (serial) or a tuple of ids (redundant group)
+
+interfaces:
+
+  structure:
+    module: tool_angel.complex_systems.analysis.structure
+    functions:
+      openness: "Ω ∈ [0, 1]"
+      coordination_cost: "τ ∈ [0, 1]"
+      ownership_entropy: "H_B ∈ [0, 1]"
+      relational_value: "ρ_V ∈ [0, 1]"
+      criticality: "dict[UUID, float] π_v"
+      effective_control: "K ∈ [0, 1]"
+
+  reliability:
+    module: tool_angel.complex_systems.analysis.reliability
+    functions:
+      function_availability: "A_f"
+      system_availability: "A_sys = Σ φ_f A_f"
+      structural_impact: "dict[UUID, float] Δ_e for every external e"
+      structural_dependencies: "external ids with Δ_e > θ"
+      is_composite: "bool"
+
+  propagation:
+    module: tool_angel.complex_systems.analysis.propagation
+    functions:
+      dependency_matrix: "D and the component order"
+      reach: "dict[UUID, int], independent of α"
+      katz_impact: "dict[UUID, float] 𝓘_j"
+      has_cycles: "bool"
+
+  index:
+    module: tool_angel.complex_systems.analysis.index
+    functions:
+      signals: "Signals(s1..s5)"
+      ice: "β·s"
+      classify: "closed | transition | ecosystem"
+      analyze: "EcosystemReport with every operator above"
+
+invariants:
+  - "0 ≤ Ω, τ, H_B, ρ_V, K, s_k, ICE ≤ 1"
+  - "τ ≤ Ω when internal ownership is a single actor (Proposition 2)"
+  - "reach is identical for every α > 0"
+  - "analysis functions never mutate the ComplexSystem"
+
+errors:
+  ValueError:
+    - "a dependency or path element references an unknown component"
+    - "value-function weights do not sum to 1"
+    - "α ≥ 1/ρ(D) on a cyclic graph"
+
+out_of_scope_for_0_1_0:
+  - expected risk E[R] and supplier ranking
+  - Monte Carlo weight sensitivity
+  - common-cause (β-factor) redundancy correction
+  - YAML loader and CLI command

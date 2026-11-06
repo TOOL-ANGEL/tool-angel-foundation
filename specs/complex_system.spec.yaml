@@ -2,7 +2,7 @@ component: CS-01
 
 name: ComplexSystem
 
-version: 1.0.0
+version: 1.1.0
 
 status: Draft
 
@@ -44,6 +44,21 @@ interfaces:
       type: Indicator
       required: true
 
+  add_actor:
+    input:
+      type: Actor
+      required: true
+
+  add_value_function:
+    input:
+      type: ValueFunction
+      required: true
+
+  validate:
+    output:
+      type: None
+    raises: ValueError
+
   summary:
     output:
       type: dictionary
@@ -69,6 +84,12 @@ properties:
 
   indicators:
     type: list[Indicator]
+
+  actors:
+    type: list[Actor]
+
+  value_functions:
+    type: list[ValueFunction]
 
 operations:
 
@@ -99,6 +120,10 @@ constraints:
   - relationships must contain Relationship instances
   - states must contain SystemState instances
   - indicators must contain Indicator instances
+  - actors must contain Actor instances
+  - value_functions must contain ValueFunction instances
+  - every dependency endpoint must be a registered component (checked by validate)
+  - value function weights must sum to 1 (checked by validate)
 
 invariants:
 
@@ -116,6 +141,6 @@ future_extensions:
   - system validation
   - resilience analysis
   - emergent behavior
-  - dependency graphs
+  - dependency graphs (implemented by CS-02, see ADR-0002)
   - certificates
   - passports
