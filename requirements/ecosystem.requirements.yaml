@@ -1,0 +1,142 @@
+component: CS-02
+
+name: EcosystemAnalysis
+
+version: 0.1.0
+
+status: Draft
+
+source: Modelo Matemático de Sistemas Ecosistémicos (2026)
+
+requirements:
+
+  # --- Data model ---------------------------------------------------------
+
+  - id: REQ-ECO-001
+    description: Every Component shall declare its scope as internal or external.
+
+  - id: REQ-ECO-002
+    description: >
+      Component availability A and contractual control γ shall lie in [0, 1];
+      failure rate λ shall be non-negative.
+
+  - id: REQ-ECO-003
+    description: Internal components shall have contractual control γ = 1.
+
+  - id: REQ-ECO-004
+    description: >
+      Value function weights φ shall be non-negative and sum to 1 within the
+      system (tolerance 1e-9).
+
+  - id: REQ-ECO-005
+    description: >
+      Every dependency relationship and every value-function path element shall
+      reference an existing component; validate() shall report any violation.
+
+  # --- Structural operators (Definition 2) --------------------------------
+
+  - id: REQ-ECO-010
+    description: >
+      Openness Ω shall be the weight share of dependencies touching at least
+      one external component.
+    status: experimental
+
+  - id: REQ-ECO-011
+    description: >
+      Coordination cost τ shall be the weight share of dependencies whose
+      endpoints belong to different actors.
+    status: experimental
+
+  - id: REQ-ECO-012
+    description: >
+      Ownership entropy H_B shall be Shannon entropy of component ownership,
+      normalized by ln m; H_B = 0 when m = 1.
+    status: established
+
+  - id: REQ-ECO-013
+    description: >
+      Relational value ρ_V shall be the φ-weighted share of each critical path
+      supplied by external components.
+    status: experimental
+
+  - id: REQ-ECO-014
+    description: >
+      Effective control K shall be the criticality-weighted mean of γ, with
+      criticality π_v equal to the sum of φ over the functions whose path
+      contains v.
+    status: experimental
+
+  # --- Reliability operators (Definition 3) -------------------------------
+
+  - id: REQ-ECO-020
+    description: >
+      Function availability A_f shall multiply serial components and, for each
+      redundant group g, the factor 1 − Π(1 − A_j).
+    status: established
+
+  - id: REQ-ECO-021
+    description: System availability A_sys shall be Σ φ_f A_f.
+    status: established
+
+  - id: REQ-ECO-022
+    description: >
+      Structural impact Δ_e shall be A_sys minus A_sys recomputed with A_e = 0.
+
+  - id: REQ-ECO-023
+    description: >
+      A system shall be classified as composite when at least two external
+      components have Δ_e > θ and there are at least two actors.
+
+  # --- Propagation and index (Definitions 3 and 4) ------------------------
+
+  - id: REQ-ECO-030
+    description: >
+      The propagation reach of j shall be the number of components i ≠ j with
+      a dependency path from i to j. It shall not depend on the Katz factor α.
+    status: established
+
+  - id: REQ-ECO-031
+    description: >
+      Katz impact shall use R = (I − αD)^−1 − I and require α < 1/ρ(D) when
+      the graph has cycles.
+    status: established
+
+  - id: REQ-ECO-040
+    description: >
+      The ICE shall be β·s over the five signals (structural share, H_B, mean
+      reach, ρ_V, τ), with β ≥ 0 and Σβ = 1; default β uniform.
+    status: experimental
+
+  - id: REQ-ECO-041
+    description: >
+      The ICE shall classify as closed (< 0.3), transition ([0.3, 0.6)) or
+      ecosystem (≥ 0.6), with thresholds configurable.
+    status: experimental
+
+  # --- Formal properties (Propositions) ----------------------------------
+
+  - id: REQ-ECO-050
+    description: Ω, τ, H_B, ρ_V, K, every signal and the ICE shall lie in [0, 1].
+    proposition: 1
+
+  - id: REQ-ECO-051
+    description: >
+      When all internal components share one owner who owns no external
+      component, τ ≤ Ω.
+    proposition: 2
+
+  - id: REQ-ECO-052
+    description: >
+      Adding an external component with criticality > 0 and γ < K shall reduce K.
+    proposition: 4
+
+  - id: REQ-ECO-053
+    description: If signals s1 ≥ s2 componentwise, ICE(s1) ≥ ICE(s2) for every β.
+    proposition: 6
+
+  # --- Reference results --------------------------------------------------
+
+  - id: REQ-ECO-060
+    description: >
+      The online-store and PIIT Segovia case studies shall reproduce the
+      published results within the tolerances of the golden tests.
