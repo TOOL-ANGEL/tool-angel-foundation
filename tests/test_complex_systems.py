@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from tool_angel.complex_systems import ComplexSystem, Relationship
+from tool_angel.complex_systems import ComplexSystem, Component, Relationship
 from tool_angel.model.entity import Entity
 
 
@@ -38,8 +38,8 @@ def test_complex_system():
         description="Modelo inicial de sistema complejo territorial",
     )
 
-    municipality = Entity.create("Segovia")
-    infrastructure = Entity.create("Infraestructura")
+    municipality = Component.create("Segovia")
+    infrastructure = Component.create("Infraestructura")
 
     relationship = Relationship.create(
         source_id=municipality.id,
