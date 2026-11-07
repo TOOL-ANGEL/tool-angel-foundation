@@ -43,8 +43,17 @@ def main():
         print(result)
         return
 
-    # Resto de comandos
-    result = app.engine.execute_command(command)
+    # Resto de comandos (argumentos posicionales y opciones clave=valor)
+    args = []
+    kwargs = {}
+    for item in sys.argv[2:]:
+        if "=" in item:
+            key, value = item.split("=", 1)
+            kwargs[key] = value
+        else:
+            args.append(item)
+
+    result = app.engine.execute_command(command, *args, **kwargs)
     print(result)
 
 
