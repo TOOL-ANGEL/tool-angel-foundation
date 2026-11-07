@@ -37,6 +37,7 @@ artifacts:
     - tests/test_ecosystem_properties.py
     - tests/test_ecosystem_risk.py
     - tests/test_ecosystem_io_cli.py
+    - tests/test_self_analysis.py
 
   examples:
     - examples/tienda_online.yaml

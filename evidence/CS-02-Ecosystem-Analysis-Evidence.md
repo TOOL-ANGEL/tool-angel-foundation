@@ -86,6 +86,16 @@ Examples:
 
 ---
 
+## Self-analysis gate
+
+- The self-analysis found one dependency cycle (`commands` <-> `builtin_commands`):
+  `commands/discovery.py` imported concrete commands. Discovery moved to
+  `builtin_commands/discovery.py`; the internal graph is now acyclic.
+- CI runs `scripts/self_analysis.py --fail-on-cycles --strict-instability 0.8`
+  as a blocking step, backed by `tests/test_self_analysis.py`.
+
+---
+
 ## Limitations
 
 - Case-study inputs are illustrative assumptions, not measurements.
