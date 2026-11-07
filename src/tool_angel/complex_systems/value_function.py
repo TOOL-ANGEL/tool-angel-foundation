@@ -45,6 +45,15 @@ class ValueFunction:
                     raise TypeError("redundant group elements must be UUIDs")
             elif not isinstance(element, UUID):
                 raise TypeError("path elements must be UUIDs or tuples of UUIDs")
+        flat = [
+            item
+            for element in self.path
+            for item in (element if isinstance(element, tuple) else (element,))
+        ]
+        if len(flat) != len(set(flat)):
+            # A repeated component would be multiplied twice in A_f but counted
+            # once in ρ_V and π_v.
+            raise ValueError("a component can appear only once in a critical path")
 
     def members(self) -> set[UUID]:
         """All component ids on the critical path, serial or redundant."""

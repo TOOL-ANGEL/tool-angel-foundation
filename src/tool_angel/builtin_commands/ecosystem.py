@@ -5,11 +5,15 @@ Usage:
     python -m tool_angel.cli ecosystem analyze <system.yaml> [theta=0.05] [alpha=0.5]
 """
 
+import yaml
+
 from tool_angel.commands.command import Command
 from tool_angel.complex_systems.analysis import analyze
 from tool_angel.complex_systems.io import load_system
 
 USAGE = "Usage: ecosystem analyze <system.yaml> [theta=<float>] [alpha=<float>]"
+
+OPTIONS = frozenset({"theta", "alpha"})
 
 
 def format_report(report, codes: dict) -> str:
@@ -58,7 +62,20 @@ class EcosystemCommand(Command):
     def execute(self, *args, **kwargs):
         if len(args) < 2 or args[0] != "analyze":
             return USAGE
-        system, codes, parameters = load_system(args[1])
-        theta = float(kwargs.get("theta", parameters.get("theta", 0.05)))
-        alpha = float(kwargs.get("alpha", parameters.get("alpha", 0.5)))
-        return format_report(analyze(system, theta=theta, alpha=alpha), codes)
+        unknown = sorted(set(kwargs) - OPTIONS)
+        if unknown:
+            return f"Error: unknown option(s) {', '.join(unknown)}.\n{USAGE}"
+        try:
+            system, codes, parameters = load_system(args[1])
+            theta = float(kwargs.get("theta", parameters.get("theta", 0.05)))
+            alpha = float(kwargs.get("alpha", parameters.get("alpha", 0.5)))
+            report = analyze(system, theta=theta, alpha=alpha)
+        except FileNotFoundError:
+            return f"Error: file not found: {args[1]}"
+        except yaml.YAMLError as error:
+            return f"Error: invalid YAML in {args[1]}: {error}"
+        except KeyError as error:
+            return f"Error: missing field {error} in {args[1]}"
+        except (TypeError, ValueError) as error:
+            return f"Error: {error}"
+        return format_report(report, codes)

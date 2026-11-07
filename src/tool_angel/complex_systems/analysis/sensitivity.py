@@ -115,9 +115,12 @@ def redundancy_penalty(system: ComplexSystem, beta: float) -> dict[str, float]:
     """
     Unavailability of every redundant group, independent vs common cause.
 
-    Keys are the group's component names joined by " ∥ ".
+    Keys are the group's component names joined by " ∥ ". Values are the
+    penalty factor Q_g(β) / Q_g(0). A group with a perfectly available member
+    (Q_j = 0) has zero unavailability under both models and gets factor 1.
     """
 
+    system.validate()
     components = system.component_map()
     result: dict[str, float] = {}
     for function in system.value_functions:
@@ -125,7 +128,12 @@ def redundancy_penalty(system: ComplexSystem, beta: float) -> dict[str, float]:
             if isinstance(element, tuple):
                 q = [1.0 - components[c].availability for c in element]
                 label = " ∥ ".join(components[c].name for c in element)
-                result[label] = common_cause_unavailability(q, beta) / math.prod(q)
+                independent = math.prod(q)
+                result[label] = (
+                    common_cause_unavailability(q, beta) / independent
+                    if independent > 0
+                    else 1.0
+                )
     return result
 
 

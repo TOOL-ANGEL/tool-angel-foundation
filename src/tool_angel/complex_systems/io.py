@@ -1,8 +1,11 @@
 """
 AngelOS Complex Systems — declarative system files (CS-02).
 
-A system is described in YAML (or an equivalent dict) and validated against
-``schemas/ecosystem.schema.json``:
+A system is described in YAML (or an equivalent dict). When the optional
+``jsonschema`` package is installed (``pip install tool-angel[schema]``) and
+the repository's ``schemas/ecosystem.schema.json`` is present, every file read
+by ``load_system`` is validated against it before being built. Mappings passed
+directly to ``system_from_dict`` are checked by the model, not by the schema:
 
     system: Tienda online
     parameters: {theta: 0.05, alpha: 0.5}        # optional
@@ -19,6 +22,7 @@ A nested list in a path is a redundant group. Actors are created from the
 distinct ``owner`` names.
 """
 
+import json
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -33,6 +37,30 @@ from tool_angel.complex_systems.system import ComplexSystem
 from tool_angel.complex_systems.value_function import PathElement, ValueFunction
 
 DEFAULT_INTERNAL_OWNER = "Operador"
+
+SCHEMA_PATH = Path(__file__).resolve().parents[3] / "schemas" / "ecosystem.schema.json"
+
+
+def schema_errors(data: Any) -> list[str] | None:
+    """
+    Validate a system mapping against the JSON schema.
+
+    Returns the list of errors (empty when valid), or None when validation is
+    not available because ``jsonschema`` or the schema file is missing.
+    """
+
+    try:
+        from jsonschema import Draft202012Validator
+    except ImportError:
+        return None
+    if not SCHEMA_PATH.is_file():
+        return None
+    schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+    validator = Draft202012Validator(schema)
+    return [
+        f"{'/'.join(str(p) for p in error.absolute_path) or '<root>'}: {error.message}"
+        for error in sorted(validator.iter_errors(data), key=lambda e: list(e.path))
+    ]
 
 
 def system_from_dict(data: Mapping[str, Any]) -> tuple[ComplexSystem, dict[str, UUID]]:
@@ -128,5 +156,14 @@ def load_system(
         data = yaml.safe_load(handle)
     if not isinstance(data, Mapping):
         raise TypeError(f"{path} does not contain a mapping")
+    data = dict(data)
+    if data.get("parameters") is None:
+        data.pop("parameters", None)
+    errors = schema_errors(data)
+    if errors:
+        raise ValueError(f"{path} does not follow the schema: " + "; ".join(errors))
+    parameters = data.get("parameters", {})
+    if not isinstance(parameters, Mapping):
+        raise TypeError(f"{path}: 'parameters' must be a mapping")
     system, ids = system_from_dict(data)
-    return system, ids, dict(data.get("parameters", {}))
+    return system, ids, dict(parameters)

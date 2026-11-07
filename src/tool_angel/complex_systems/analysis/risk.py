@@ -34,9 +34,10 @@ def provider_risks(
     alpha: float = propagation.DEFAULT_ALPHA,
 ) -> list[ProviderRisk]:
     """
-    Risk of every external component, highest first.
+    Risk of every external component, highest first. Validates the system first.
     """
 
+    system.validate()
     impact = reliability.structural_impact(system)
     katz = propagation.katz_impact(system, alpha)
     rows = [

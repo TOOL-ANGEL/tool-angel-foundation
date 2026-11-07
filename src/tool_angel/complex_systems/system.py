@@ -165,6 +165,7 @@ class ComplexSystem:
         if len(components) != len(self.components):
             errors.append("component ids must be unique")
 
+        seen_edges: set[tuple[UUID, UUID]] = set()
         for relationship in self.dependencies():
             for end in (relationship.source_id, relationship.target_id):
                 if end not in components:
@@ -173,6 +174,17 @@ class ComplexSystem:
                     )
             if relationship.weight < 0:
                 errors.append(f"dependency {relationship.id} has negative weight")
+            edge = (relationship.source_id, relationship.target_id)
+            if edge[0] == edge[1]:
+                errors.append(
+                    f"dependency {relationship.id} makes a component depend on itself"
+                )
+            elif edge in seen_edges:
+                errors.append(
+                    f"duplicate dependency {edge[0]} -> {edge[1]}; "
+                    "merge it into one weighted edge"
+                )
+            seen_edges.add(edge)
 
         for component in self.components:
             if (

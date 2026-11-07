@@ -3,6 +3,10 @@ CS-02 Ecosystem Analysis — change propagation (Definition 3, Proposition 5).
 
 D_ij = 1 when component i depends on component j. A change in j reaches every
 i that has a dependency path towards j.
+
+D is binary: dependency weights feed Ω and τ but not the Katz impact, which
+counts paths regardless of their strength. Duplicate edges are rejected by
+ComplexSystem.validate(), so D and the weighted operators see the same graph.
 """
 
 from uuid import UUID

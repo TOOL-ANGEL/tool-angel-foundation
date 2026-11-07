@@ -12,7 +12,7 @@ import yaml
 
 from tool_angel.builtin_commands.ecosystem import USAGE, EcosystemCommand
 from tool_angel.complex_systems.analysis import ECOSYSTEM, TRANSITION, analyze
-from tool_angel.complex_systems.io import load_system, system_from_dict
+from tool_angel.complex_systems.io import load_system, schema_errors, system_from_dict
 from tool_angel.runtime.engine import RuntimeEngine
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,6 +43,13 @@ def test_example_files_follow_the_schema():
         data = yaml.safe_load(path.read_text(encoding="utf-8"))
         assert set(data) <= allowed
         assert all(set(c) <= component_keys for c in data["components"])
+
+
+def test_example_files_validate_against_the_schema():
+    pytest.importorskip("jsonschema")
+    for path in EXAMPLES.glob("*.yaml"):
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+        assert schema_errors(data) == [], path.name
 
 
 def test_dict_loader_accepts_mapping_edges_and_rejects_unknown_codes():
