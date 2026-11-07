@@ -1,0 +1,84 @@
+component: CS-03
+
+name: EmpiricalValidation
+
+version: 0.1.0
+
+status: Draft
+
+depends_on:
+  - CS-01 ComplexSystem
+  - CS-02 EcosystemAnalysis
+
+purpose:
+  description: >
+    Ingest field evidence for the parameters Θ = (A, γ, λ), propagate its
+    uncertainty, and test the CS-02 operators against expert judgement and
+    observed outages following the four-phase roadmap of the model.
+
+interfaces:
+
+  measurement:
+    module: tool_angel.complex_systems.measurement
+    objects:
+      CONTROL_CHECKLIST: "6 fixed items, answers in {0, 0.5, 1}"
+      Measurement: "up/down hours + outages, incidents/years, checklist"
+    functions:
+      availability_from_mtbf: "MTBF / (MTBF + MTTR)"
+      control_score: "γ = mean of the checklist"
+
+  system_file:
+    component_key: measurement
+    blocks:
+      monitoring: "{up_hours, down_hours, outages}"
+      mtbf: "{mtbf, mttr, outages}"
+      incidents: "{count, years = 1}"
+      checklist: "{sla_penalty, change_notice, audit_right, data_portability, support_times, substitution}"
+    rules:
+      - monitoring and mtbf are mutually exclusive
+      - a measured parameter cannot also be given
+      - checklist only on external components
+
+  validation:
+    module: tool_angel.complex_systems.analysis.validation
+    phase_1:
+      parameter_uncertainty: "ParameterUncertainty(ice, system_availability, expected_risk, probabilities)"
+    statistics:
+      ranks: "average ranks"
+      spearman: "ρ_S"
+      permutation_p_value: "one-sided, seeded"
+      cronbach_alpha: "α_C"
+      signal_correlations: "5 × 5 Spearman"
+      redundant_pairs: "abs(ρ) > 0.9"
+      kmo: "Kaiser–Meyer–Olkin"
+    phase_3:
+      youden_threshold: "(cut, J)"
+      calibrate_thresholds: "ThresholdCalibration(low, J_low, high, J_high)"
+      estimate_beta_cc: "β_cc"
+      select_alpha: "(best α, ρ_S per α)"
+    phase_4:
+      predictive_validity: "PredictiveValidity(n, ρ, p)"
+    protocol:
+      load_sample: "(name, [SampleEntry])"
+      validate_sample: "ValidationReport(sample, n, phases[1..4])"
+
+  cli:
+    - "ecosystem measure <system.yaml> [samples=1000] [seed=42]"
+    - "ecosystem validate <sample.yaml> [permutations=10000] [seed=42]"
+
+acceptance_criteria:
+  phase_1: {min_measured_systems: 3, max_ice_interval_width: 0.15}
+  phase_2: {min_sample: 30, min_cronbach: 0.70, min_spearman: 0.6, max_signal_correlation: 0.9}
+  phase_3: {min_sample: 30, min_youden: 0.5}
+  phase_4: {min_sample: 30, max_p_value: 0.05}
+
+invariants:
+  - "validated ⇔ all four phases pass"
+  - "phase status = insufficient whenever its sample is below the minimum"
+  - "results are identical for identical seeds"
+  - "systems are never mutated"
+
+out_of_scope_for_0_1_0:
+  - deriving β by principal components when KMO ≥ 0.6 (only reported)
+  - observability O_E as a replacement signal (only suggested in notes)
+  - joint parameter and weight uncertainty in one Monte Carlo

@@ -26,3 +26,5 @@ jobs:
         run: |
           PYTHONPATH=src python -m tool_angel.cli ecosystem analyze examples/tienda_online.yaml
           PYTHONPATH=src python -m tool_angel.cli ecosystem analyze examples/piit_segovia.yaml
+          PYTHONPATH=src python -m tool_angel.cli ecosystem measure examples/piit_segovia_measured.yaml
+          PYTHONPATH=src python -m tool_angel.cli ecosystem validate examples/validation/pilot_sample.yaml permutations=1000

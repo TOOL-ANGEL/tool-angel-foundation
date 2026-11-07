@@ -1,0 +1,75 @@
+component: CS-03
+
+name: EmpiricalValidation
+
+version: 0.1.0
+
+status: Provisional
+
+classification: Analysis Component
+
+owner: TOOL-ANGEL Foundation
+
+created: 2026
+
+artifacts:
+
+  adr:
+    - ADR-0003-Empirical-Validation-Protocol.md
+
+  requirements:
+    - validation.requirements.yaml
+
+  specification:
+    - empirical_validation.spec.yaml
+
+  schema:
+    - ecosystem.schema.json (measurement block)
+
+  implementation:
+    - src/tool_angel/complex_systems/measurement.py
+    - src/tool_angel/complex_systems/io.py
+    - src/tool_angel/complex_systems/analysis/validation.py
+    - src/tool_angel/builtin_commands/ecosystem.py
+
+  tests:
+    - tests/test_validation.py
+
+  examples:
+    - examples/piit_segovia_measured.yaml
+    - examples/validation/pilot_sample.yaml
+
+  evidence:
+    - CS-03-Empirical-Validation-Evidence.md
+
+  certificate:
+    - CS-03-Empirical-Validation-Certificate.md
+
+dependencies:
+  - CS-01 ComplexSystem
+  - CS-02 EcosystemAnalysis
+  - external: numpy
+  - external: pyyaml
+
+dependents:
+  - builtin_commands/ecosystem
+
+compatibility:
+
+  foundation: "1.0"
+
+traceability:
+
+  requirements: true
+
+  specification: true
+
+  schema: true
+
+  implementation: true
+
+  tests: true
+
+  evidence: true
+
+  certification: provisional

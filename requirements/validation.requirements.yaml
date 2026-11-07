@@ -1,0 +1,127 @@
+component: CS-03
+
+name: EmpiricalValidation
+
+version: 0.1.0
+
+status: Draft
+
+depends_on:
+  - CS-01 ComplexSystem
+  - CS-02 EcosystemAnalysis
+
+source: Modelo Matemático de Sistemas Ecosistémicos (2026), limitations L1–L5 and validation roadmap
+
+requirements:
+
+  # --- Measurement (L1) ---------------------------------------------------
+
+  - id: REQ-VAL-001
+    description: >
+      Availability shall be derivable from monitoring as up / (up + down)
+      hours, or from MTBF / (MTBF + MTTR).
+
+  - id: REQ-VAL-002
+    description: >
+      Contractual control γ shall be the mean of the fixed checklist
+      (SLA penalty, change notice, audit right, data portability, support
+      times, substitution) with answers in {0, ½, 1}; incomplete, unknown or
+      free answers shall be rejected.
+
+  - id: REQ-VAL-003
+    description: The control checklist shall apply only to external components.
+
+  - id: REQ-VAL-004
+    description: >
+      A parameter given explicitly and also measured shall be rejected.
+
+  - id: REQ-VAL-005
+    description: >
+      The availability distribution shall be U = 1 − A ~ Û · Gamma(n, 1/n)
+      with n the number of outages, so that less evidence never yields a
+      narrower interval; with n = 0 the point value is kept.
+
+  - id: REQ-VAL-006
+    description: The failure-rate distribution shall be Gamma(k + ½, 1/T).
+
+  - id: REQ-VAL-010
+    description: >
+      Parameter uncertainty shall be propagated by seeded Monte Carlo to the
+      ICE, A_sys and E[R], reported as mean and p5–p95, without mutating the
+      system.
+
+  - id: REQ-VAL-011
+    description: >
+      Phase 1 shall pass when at least 3 systems are measured and every ICE
+      interval width is ≤ 0.15.
+
+  # --- Validity (L2, L5) -------------------------------------------------
+
+  - id: REQ-VAL-020
+    description: Spearman ρ_S shall use average ranks for ties.
+
+  - id: REQ-VAL-021
+    description: >
+      Cronbach's α_C = k/(k−1)·(1 − Σσ²_j / σ²_total) over the five signals.
+
+  - id: REQ-VAL-022
+    description: >
+      Signal pairs with abs(ρ_S) > 0.9 shall be reported as redundant.
+
+  - id: REQ-VAL-023
+    description: The KMO sampling adequacy shall be reported when defined.
+
+  - id: REQ-VAL-024
+    description: >
+      Phase 2 shall pass when N ≥ 30, α_C ≥ 0.70, ρ_S(ICE, experts) ≥ 0.6 and
+      no redundant pair exists.
+
+  # --- Calibration (L2, L3, L4) ------------------------------------------
+
+  - id: REQ-VAL-030
+    description: >
+      ICE thresholds shall be the Youden-optimal cuts closed vs rest and
+      ecosystem vs rest against the expert classification.
+
+  - id: REQ-VAL-031
+    description: >
+      β_cc shall be estimated as common-cause failures / total failures of a
+      redundant group.
+
+  - id: REQ-VAL-032
+    description: >
+      α shall be selected among candidates by the Spearman correlation of
+      E[R] with observed outage hours.
+
+  - id: REQ-VAL-033
+    description: >
+      Phase 3 shall pass when N ≥ 30, both Youden J ≥ 0.5 and low < high.
+
+  # --- Prediction (L2) ---------------------------------------------------
+
+  - id: REQ-VAL-040
+    description: >
+      Predictive validity shall be ρ_S(E[R], outage hours) with a one-sided
+      seeded permutation p-value.
+
+  - id: REQ-VAL-041
+    description: Phase 4 shall pass when N ≥ 30, ρ_S > 0 and p < 0.05.
+
+  # --- Protocol and interface --------------------------------------------
+
+  - id: REQ-VAL-050
+    description: >
+      Each phase shall report pass, fail or insufficient; a sample below the
+      roadmap minimum shall be insufficient even if statistics are computed.
+
+  - id: REQ-VAL-051
+    description: >
+      The model shall be reported as validated only when all four phases pass.
+
+  - id: REQ-VAL-052
+    description: The protocol shall never mutate the systems of the sample.
+
+  - id: REQ-VAL-060
+    description: >
+      The CLI shall expose `ecosystem measure <system.yaml>` and
+      `ecosystem validate <sample.yaml>`.

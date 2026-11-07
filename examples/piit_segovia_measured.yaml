@@ -1,0 +1,109 @@
+# Case study of Part III with the CS-03 measurement format.
+# ILLUSTRATIVE evidence: it shows the format of a 12-month field record and how
+# its uncertainty reaches the ICE. Replace every block with real monitoring
+# logs, incident histories and contract reviews before drawing conclusions.
+system: Plataforma municipal PIIT (medida)
+description: PIIT Segovia con parámetros derivados de evidencia (formato CS-03).
+parameters:
+  theta: 0.05
+  alpha: 0.5
+
+components:
+  - code: POR
+    name: Portal web
+    owner: Operador PIIT
+    measurement: {monitoring: {up_hours: 8716, down_hours: 44, outages: 11}}
+  - code: GEO
+    name: GeoServer WMS/WFS
+    owner: Operador PIIT
+    measurement: {monitoring: {up_hours: 8672, down_hours: 88, outages: 14}}
+  - code: PGS
+    name: Base geoespacial PostGIS
+    owner: Operador PIIT
+    measurement: {mtbf: {mtbf: 1092, mttr: 5.5, outages: 8}}
+  - {code: CON, name: Módulo de contratos, owner: Operador PIIT, availability: 0.995}
+  - {code: TAB, name: Tablero de indicadores, owner: Operador PIIT, availability: 0.995}
+  - code: ETL
+    name: Integración ETL
+    owner: Operador PIIT
+    measurement: {monitoring: {up_hours: 8672, down_hours: 88, outages: 9}}
+  - code: HOS
+    name: Hosting
+    scope: external
+    owner: Hosting
+    measurement:
+      monitoring: {up_hours: 8751, down_hours: 9, outages: 3}
+      incidents: {count: 1, years: 1}
+      checklist: {sla_penalty: 1, change_notice: 0.5, audit_right: 0,
+                  data_portability: 1, support_times: 0.5, substitution: 0}
+  - code: SEC
+    name: SECOP II
+    scope: external
+    owner: Colombia Compra Eficiente
+    measurement:
+      monitoring: {up_hours: 8585, down_hours: 175, outages: 12}
+      incidents: {count: 4, years: 1}
+      checklist: {sla_penalty: 0, change_notice: 0.5, audit_right: 0,
+                  data_portability: 0, support_times: 0, substitution: 0}
+  - code: DAT
+    name: Datos abiertos
+    scope: external
+    owner: MinTIC
+    measurement:
+      monitoring: {up_hours: 8585, down_hours: 175, outages: 10}
+      incidents: {count: 3, years: 1}
+      checklist: {sla_penalty: 0, change_notice: 0, audit_right: 0,
+                  data_portability: 0.5, support_times: 0, substitution: 0}
+  - code: IGA
+    name: Cartografía base IGAC
+    scope: external
+    owner: IGAC
+    measurement:
+      monitoring: {up_hours: 8585, down_hours: 175, outages: 8}
+      incidents: {count: 3, years: 1}
+      checklist: {sla_penalty: 0, change_notice: 0.5, audit_right: 0,
+                  data_portability: 0, support_times: 0, substitution: 0}
+  - {code: OSM, name: Mapa base OpenStreetMap, scope: external, owner: OSM, availability: 0.995, control: 0.0, failure_rate: 1}
+  - code: EDU
+    name: Datos de obra EDURSEG
+    scope: external
+    owner: EDURSEG
+    measurement:
+      monitoring: {up_hours: 8322, down_hours: 438, outages: 6}
+      incidents: {count: 6, years: 1}
+      checklist: {sla_penalty: 0.5, change_notice: 1, audit_right: 1,
+                  data_portability: 0.5, support_times: 0.5, substitution: 0}
+  - code: AAS
+    name: Datos de red AASSA
+    scope: external
+    owner: AASSA
+    measurement:
+      monitoring: {up_hours: 8322, down_hours: 438, outages: 5}
+      incidents: {count: 6, years: 1}
+      checklist: {sla_penalty: 0.5, change_notice: 0.5, audit_right: 1,
+                  data_portability: 0.5, support_times: 0.5, substitution: 0}
+
+dependencies:
+  - [POR, GEO, 8]
+  - [POR, CON, 6]
+  - [POR, TAB, 5]
+  - [POR, HOS, 10]
+  - [GEO, PGS, 10]
+  - [GEO, IGA, 5]
+  - [GEO, OSM, 4]
+  - [GEO, HOS, 10]
+  - [PGS, HOS, 10]
+  - [CON, PGS, 6]
+  - [TAB, PGS, 6]
+  - [ETL, PGS, 8]
+  - [ETL, SEC, 6]
+  - [ETL, EDU, 5]
+  - [ETL, AAS, 5]
+  - [ETL, DAT, 3]
+  - [ETL, HOS, 6]
+
+functions:
+  - {name: Visor geográfico, weight: 0.35, path: [POR, GEO, PGS, HOS, [IGA, OSM]]}
+  - {name: Seguimiento contractual, weight: 0.30, path: [POR, CON, PGS, HOS, ETL, SEC, EDU]}
+  - {name: Indicadores de servicios públicos, weight: 0.20, path: [TAB, PGS, HOS, ETL, AAS]}
+  - {name: Publicación de datos abiertos, weight: 0.15, path: [ETL, PGS, HOS, DAT]}

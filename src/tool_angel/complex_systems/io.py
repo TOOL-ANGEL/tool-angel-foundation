@@ -17,6 +17,20 @@ A system is described in YAML (or an equivalent dict) and validated against
 
 A nested list in a path is a redundant group. Actors are created from the
 distinct ``owner`` names.
+
+A component may replace availability, failure_rate and control by field
+evidence (CS-03, see ``measurement.py``):
+
+      - code: SEC
+        scope: external
+        measurement:
+          monitoring: {up_hours: 8600, down_hours: 160, outages: 9}
+          incidents: {count: 4, years: 1}
+          checklist: {sla_penalty: 0, change_notice: 0.5, audit_right: 0,
+                      data_portability: 1, support_times: 0, substitution: 0}
+
+The point estimates become the component parameters and the Measurement is
+kept in ``component.metadata["measurement"]`` for uncertainty propagation.
 """
 
 from collections.abc import Mapping
@@ -28,6 +42,7 @@ import yaml
 
 from tool_angel.complex_systems.actor import Actor
 from tool_angel.complex_systems.component import Component
+from tool_angel.complex_systems.measurement import Measurement
 from tool_angel.complex_systems.relationship import Relationship
 from tool_angel.complex_systems.system import ComplexSystem
 from tool_angel.complex_systems.value_function import PathElement, ValueFunction
@@ -69,16 +84,44 @@ def system_from_dict(data: Mapping[str, Any]) -> tuple[ComplexSystem, dict[str, 
                 )
             )
         )
+        metadata: dict[str, Any] = {"code": code}
+        availability = item.get("availability")
+        control = item.get("control")
+        failure_rate = item.get("failure_rate")
+        if "measurement" in item:
+            measured = Measurement.from_dict(item["measurement"])
+            for label, given, value in (
+                ("availability", availability, measured.availability),
+                ("control", control, measured.control),
+                ("failure_rate", failure_rate, measured.failure_rate),
+            ):
+                if given is not None and value is not None:
+                    raise ValueError(
+                        f"component {code!r}: {label} is both given and measured"
+                    )
+            if measured.control is not None and scope == "internal":
+                raise ValueError(
+                    f"component {code!r}: the control checklist applies only"
+                    " to external components"
+                )
+            availability = (
+                availability if measured.availability is None else measured.availability
+            )
+            control = control if measured.control is None else measured.control
+            failure_rate = (
+                failure_rate if measured.failure_rate is None else measured.failure_rate
+            )
+            metadata["measurement"] = measured
         component = Component.create(
             name=str(item.get("name", code)),
             type=str(item.get("type", "")),
             description=str(item.get("description", "")),
-            metadata={"code": code},
+            metadata=metadata,
             scope=scope,
             owner_id=owner.id,
-            availability=float(item.get("availability", 1.0)),
-            control=None if item.get("control") is None else float(item["control"]),
-            failure_rate=float(item.get("failure_rate", 0.0)),
+            availability=1.0 if availability is None else float(availability),
+            control=None if control is None else float(control),
+            failure_rate=0.0 if failure_rate is None else float(failure_rate),
         )
         system.add_component(component)
         ids[code] = component.id
