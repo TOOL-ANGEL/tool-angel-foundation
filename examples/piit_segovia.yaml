@@ -1,0 +1,47 @@
+# Case study of Part III: municipal territorial-intelligence platform.
+# Illustrative assumptions, to be replaced by measured values.
+system: Plataforma municipal PIIT
+description: Plataforma de inteligencia territorial del Municipio de Segovia (Antioquia).
+parameters:
+  theta: 0.05
+  alpha: 0.5
+
+components:
+  - {code: POR, name: Portal web, owner: Operador PIIT, availability: 0.995}
+  - {code: GEO, name: GeoServer WMS/WFS, owner: Operador PIIT, availability: 0.99}
+  - {code: PGS, name: Base geoespacial PostGIS, owner: Operador PIIT, availability: 0.995}
+  - {code: CON, name: Módulo de contratos, owner: Operador PIIT, availability: 0.995}
+  - {code: TAB, name: Tablero de indicadores, owner: Operador PIIT, availability: 0.995}
+  - {code: ETL, name: Integración ETL, owner: Operador PIIT, availability: 0.99}
+  - {code: HOS, name: Hosting, scope: external, owner: Hosting, availability: 0.999, control: 0.5, failure_rate: 1}
+  - {code: SEC, name: SECOP II, scope: external, owner: Colombia Compra Eficiente, availability: 0.98, control: 0.05, failure_rate: 4}
+  - {code: DAT, name: Datos abiertos, scope: external, owner: MinTIC, availability: 0.98, control: 0.05, failure_rate: 3}
+  - {code: IGA, name: Cartografía base IGAC, scope: external, owner: IGAC, availability: 0.98, control: 0.05, failure_rate: 3}
+  - {code: OSM, name: Mapa base OpenStreetMap, scope: external, owner: OSM, availability: 0.995, control: 0.0, failure_rate: 1}
+  - {code: EDU, name: Datos de obra EDURSEG, scope: external, owner: EDURSEG, availability: 0.95, control: 0.6, failure_rate: 6}
+  - {code: AAS, name: Datos de red AASSA, scope: external, owner: AASSA, availability: 0.95, control: 0.5, failure_rate: 6}
+
+dependencies:
+  - [POR, GEO, 8]
+  - [POR, CON, 6]
+  - [POR, TAB, 5]
+  - [POR, HOS, 10]
+  - [GEO, PGS, 10]
+  - [GEO, IGA, 5]
+  - [GEO, OSM, 4]
+  - [GEO, HOS, 10]
+  - [PGS, HOS, 10]
+  - [CON, PGS, 6]
+  - [TAB, PGS, 6]
+  - [ETL, PGS, 8]
+  - [ETL, SEC, 6]
+  - [ETL, EDU, 5]
+  - [ETL, AAS, 5]
+  - [ETL, DAT, 3]
+  - [ETL, HOS, 6]
+
+functions:
+  - {name: Visor geográfico, weight: 0.35, path: [POR, GEO, PGS, HOS, [IGA, OSM]]}
+  - {name: Seguimiento contractual, weight: 0.30, path: [POR, CON, PGS, HOS, ETL, SEC, EDU]}
+  - {name: Indicadores de servicios públicos, weight: 0.20, path: [TAB, PGS, HOS, ETL, AAS]}
+  - {name: Publicación de datos abiertos, weight: 0.15, path: [ETL, PGS, HOS, DAT]}

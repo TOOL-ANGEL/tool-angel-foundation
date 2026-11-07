@@ -1,0 +1,50 @@
+# Case study of Part II: online store of the base text.
+# Illustrative assumptions, not measurements.
+system: Tienda online
+description: Tienda online que evolucionó de web corporativa a ecosistema de servicios.
+parameters:
+  theta: 0.05
+  alpha: 0.5
+
+components:
+  - {code: WEB, name: Web, owner: Empresa, availability: 0.999}
+  - {code: BD, name: Base de datos, owner: Empresa, availability: 0.999}
+  - {code: ADM, name: Administración, owner: Empresa, availability: 0.99}
+  - {code: APP, name: App móvil, owner: Empresa, availability: 0.999}
+  - {code: REC, name: Recomendación, owner: Empresa, availability: 0.998}
+  - {code: PAG, name: Pasarela de pago, scope: external, owner: Pasarela, availability: 0.9995, control: 0.4, failure_rate: 2}
+  - {code: AUT, name: Autenticación social, scope: external, owner: Identidad, availability: 0.999, control: 0.2, failure_rate: 3}
+  - {code: LOG, name: Logística, scope: external, owner: Logística, availability: 0.998, control: 0.5, failure_rate: 4}
+  - {code: MKT, name: Marketing por correo, scope: external, owner: Marketing, availability: 0.997, control: 0.3, failure_rate: 2}
+  - {code: ANA, name: Analítica, scope: external, owner: Analítica, availability: 0.997, control: 0.2, failure_rate: 3}
+  - {code: CLD, name: Nube, scope: external, owner: Nube, availability: 0.9999, control: 0.3, failure_rate: 1}
+  - {code: BOT, name: Chatbot, scope: external, owner: Chatbot, availability: 0.995, control: 0.3, failure_rate: 4}
+  - {code: CRM, name: Atención al cliente, scope: external, owner: Atención, availability: 0.998, control: 0.4, failure_rate: 2}
+
+dependencies:
+  - [WEB, BD, 10]
+  - [WEB, AUT, 6]
+  - [WEB, PAG, 8]
+  - [WEB, REC, 4]
+  - [WEB, ANA, 3]
+  - [WEB, CLD, 10]
+  - [WEB, LOG, 5]
+  - [WEB, MKT, 2]
+  - [WEB, BOT, 2]
+  - [APP, WEB, 8]
+  - [APP, AUT, 5]
+  - [APP, PAG, 6]
+  - [BD, CLD, 10]
+  - [REC, BD, 5]
+  - [REC, ANA, 3]
+  - [ADM, BD, 4]
+  - [MKT, BD, 3]
+  - [BOT, CRM, 4]
+  - [CRM, BD, 4]
+
+functions:
+  - {name: Compra, weight: 0.55, path: [WEB, BD, CLD, AUT, PAG]}
+  - {name: Envío, weight: 0.20, path: [WEB, BD, CLD, LOG]}
+  - {name: Atención, weight: 0.10, path: [BOT, CRM, BD, CLD]}
+  - {name: Marketing, weight: 0.08, path: [MKT, BD, CLD]}
+  - {name: Recomendación, weight: 0.07, path: [REC, ANA, BD, CLD]}
