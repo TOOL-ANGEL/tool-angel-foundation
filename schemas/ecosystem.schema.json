@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/TOOL-ANGEL/tool-angel-foundation/schemas/ecosystem.schema.json",
+  "title": "CS-02 Ecosystem system file",
+  "type": "object",
+  "required": ["system", "components"],
+  "additionalProperties": false,
+  "properties": {
+    "system": {"type": "string", "minLength": 1},
+    "description": {"type": "string"},
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "theta": {"type": "number", "minimum": 0, "maximum": 1},
+        "alpha": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["code"],
+        "additionalProperties": false,
+        "properties": {
+          "code": {"type": "string", "minLength": 1},
+          "name": {"type": "string"},
+          "type": {"type": "string"},
+          "description": {"type": "string"},
+          "scope": {"enum": ["internal", "external"], "default": "internal"},
+          "owner": {"type": "string"},
+          "availability": {"type": "number", "minimum": 0, "maximum": 1, "default": 1},
+          "control": {"type": "number", "minimum": 0, "maximum": 1},
+          "failure_rate": {"type": "number", "minimum": 0, "default": 0}
+        }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "array",
+            "prefixItems": [{"type": "string"}, {"type": "string"}, {"type": "number", "minimum": 0}],
+            "minItems": 2,
+            "maxItems": 3
+          },
+          {
+            "type": "object",
+            "required": ["from", "to"],
+            "additionalProperties": false,
+            "properties": {
+              "from": {"type": "string"},
+              "to": {"type": "string"},
+              "weight": {"type": "number", "minimum": 0}
+            }
+          }
+        ]
+      }
+    },
+    "functions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "weight", "path"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "weight": {"type": "number", "minimum": 0},
+          "path": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "oneOf": [
+                {"type": "string"},
+                {"type": "array", "minItems": 2, "items": {"type": "string"}}
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
