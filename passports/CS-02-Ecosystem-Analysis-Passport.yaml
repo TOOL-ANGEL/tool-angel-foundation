@@ -1,0 +1,77 @@
+component: CS-02
+
+name: EcosystemAnalysis
+
+version: 0.2.0
+
+status: Provisional
+
+classification: Analysis Component
+
+owner: TOOL-ANGEL Foundation
+
+created: 2026
+
+artifacts:
+
+  adr:
+    - ADR-0002-Ecosystem-Analysis-Engine.md
+
+  requirements:
+    - ecosystem.requirements.yaml
+
+  specification:
+    - ecosystem_analysis.spec.yaml
+
+  schema:
+    - ecosystem.schema.json
+
+  implementation:
+    - src/tool_angel/complex_systems/analysis/
+    - src/tool_angel/complex_systems/io.py
+    - src/tool_angel/builtin_commands/ecosystem.py
+    - scripts/self_analysis.py
+
+  tests:
+    - tests/test_ecosystem_golden.py
+    - tests/test_ecosystem_properties.py
+    - tests/test_ecosystem_risk.py
+    - tests/test_ecosystem_io_cli.py
+
+  examples:
+    - examples/tienda_online.yaml
+    - examples/piit_segovia.yaml
+
+  evidence:
+    - CS-02-Ecosystem-Analysis-Evidence.md
+
+  certificate:
+    - CS-02-Ecosystem-Analysis-Certificate.md
+
+dependencies:
+  - CS-01 ComplexSystem
+  - external: numpy
+  - external: pyyaml
+
+dependents:
+  - builtin_commands/ecosystem
+
+compatibility:
+
+  foundation: "1.0"
+
+traceability:
+
+  requirements: true
+
+  specification: true
+
+  schema: true
+
+  implementation: true
+
+  tests: true
+
+  evidence: true
+
+  certification: provisional

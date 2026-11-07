@@ -1,0 +1,28 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: pip install numpy pyyaml pytest
+      - name: Run tests
+        run: python -m pytest -q
+      - name: Self-analysis (CS-02, report only)
+        run: python scripts/self_analysis.py
+      - name: Analyze bundled examples
+        run: |
+          PYTHONPATH=src python -m tool_angel.cli ecosystem analyze examples/tienda_online.yaml
+          PYTHONPATH=src python -m tool_angel.cli ecosystem analyze examples/piit_segovia.yaml

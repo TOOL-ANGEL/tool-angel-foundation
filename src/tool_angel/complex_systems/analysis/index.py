@@ -10,7 +10,12 @@ from collections.abc import Sequence
 from dataclasses import astuple, dataclass, field
 from uuid import UUID
 
-from tool_angel.complex_systems.analysis import propagation, reliability, structure
+from tool_angel.complex_systems.analysis import (
+    propagation,
+    reliability,
+    risk,
+    structure,
+)
 from tool_angel.complex_systems.indicator import Indicator
 from tool_angel.complex_systems.system import ComplexSystem
 
@@ -100,6 +105,8 @@ class EcosystemReport:
     signals: Signals
     ice: float
     classification: str
+    expected_risk: float
+    provider_risks: list[risk.ProviderRisk]
     parameters: dict[str, object] = field(default_factory=dict)
 
     @property
@@ -124,6 +131,7 @@ class EcosystemReport:
                 "established",
             ),
             ("Downtime", self.downtime_hours_per_year, "h/year", "established"),
+            ("E[R] expected risk", self.expected_risk, "events/year", "experimental"),
             ("ICE", self.ice, "index", "experimental"),
         ]
         return [
@@ -175,6 +183,8 @@ def analyze(
         signals=values,
         ice=score,
         classification=classify(score, thresholds),
+        expected_risk=risk.expected_risk(system, alpha),
+        provider_risks=risk.provider_risks(system, alpha),
         parameters={
             "theta": theta,
             "alpha": alpha,

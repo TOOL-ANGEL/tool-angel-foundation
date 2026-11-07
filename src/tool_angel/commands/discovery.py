@@ -2,6 +2,7 @@
 AngelOS Command Discovery.
 """
 
+from tool_angel.builtin_commands.ecosystem import EcosystemCommand
 from tool_angel.builtin_commands.help import HelpCommand
 from tool_angel.builtin_commands.version import VersionCommand
 
@@ -16,4 +17,5 @@ class CommandDiscovery:
         return [
             HelpCommand(),
             VersionCommand(),
+            EcosystemCommand(),
         ]
