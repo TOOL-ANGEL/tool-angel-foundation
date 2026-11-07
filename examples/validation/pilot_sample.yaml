@@ -1,0 +1,21 @@
+# CS-03 validation sample — pilot template.
+#
+# Each entry points to a system file (paths relative to this file) and carries
+# the external evidence the protocol compares the model against:
+#
+#   expert_class:  closed | transition | ecosystem   (panel classification, phases 2–3)
+#   expert_score:  ordinal panel score, e.g. mean of 1–5 ratings (phase 2, optional)
+#   outage_hours:  outage hours observed over the 12 months after the
+#                  measurement (phase 4)
+#
+# No expert judgement or outage record has been collected yet, so those fields
+# are left out on purpose: inventing them would validate nothing. The protocol
+# reports phases 2–4 as INSUFFICIENT until the panel and the follow-up exist
+# for at least 30 systems, and phase 1 until 3 systems carry measurements.
+
+sample: Piloto — casos de estudio del modelo
+
+systems:
+  - file: ../tienda_online.yaml
+  - file: ../piit_segovia.yaml
+  - file: ../piit_segovia_measured.yaml

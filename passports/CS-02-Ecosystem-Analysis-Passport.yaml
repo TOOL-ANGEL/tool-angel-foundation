@@ -55,6 +55,7 @@ dependencies:
 
 dependents:
   - builtin_commands/ecosystem
+  - CS-03 EmpiricalValidation
 
 compatibility:
 

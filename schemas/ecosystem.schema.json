@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/TOOL-ANGEL/tool-angel-foundation/schemas/ecosystem.schema.json",
-  "title": "CS-02 Ecosystem system file",
+  "title": "CS-02 Ecosystem system file (CS-03 measurement extension)",
   "type": "object",
   "required": ["system", "components"],
   "additionalProperties": false,
@@ -32,7 +32,57 @@
           "owner": {"type": "string"},
           "availability": {"type": "number", "minimum": 0, "maximum": 1, "default": 1},
           "control": {"type": "number", "minimum": 0, "maximum": 1},
-          "failure_rate": {"type": "number", "minimum": 0, "default": 0}
+          "failure_rate": {"type": "number", "minimum": 0, "default": 0},
+          "measurement": {
+            "description": "CS-03 field evidence; replaces availability, failure_rate and control (see measurement.py).",
+            "type": "object",
+            "additionalProperties": false,
+            "not": {"required": ["monitoring", "mtbf"]},
+            "properties": {
+              "monitoring": {
+                "type": "object",
+                "required": ["up_hours", "down_hours", "outages"],
+                "additionalProperties": false,
+                "properties": {
+                  "up_hours": {"type": "number", "minimum": 0},
+                  "down_hours": {"type": "number", "minimum": 0},
+                  "outages": {"type": "integer", "minimum": 0}
+                }
+              },
+              "mtbf": {
+                "type": "object",
+                "required": ["mtbf", "mttr", "outages"],
+                "additionalProperties": false,
+                "properties": {
+                  "mtbf": {"type": "number", "exclusiveMinimum": 0},
+                  "mttr": {"type": "number", "minimum": 0},
+                  "outages": {"type": "integer", "minimum": 1}
+                }
+              },
+              "incidents": {
+                "type": "object",
+                "required": ["count"],
+                "additionalProperties": false,
+                "properties": {
+                  "count": {"type": "integer", "minimum": 0},
+                  "years": {"type": "number", "exclusiveMinimum": 0, "default": 1}
+                }
+              },
+              "checklist": {
+                "type": "object",
+                "required": ["sla_penalty", "change_notice", "audit_right", "data_portability", "support_times", "substitution"],
+                "additionalProperties": false,
+                "properties": {
+                  "sla_penalty": {"enum": [0, 0.5, 1]},
+                  "change_notice": {"enum": [0, 0.5, 1]},
+                  "audit_right": {"enum": [0, 0.5, 1]},
+                  "data_portability": {"enum": [0, 0.5, 1]},
+                  "support_times": {"enum": [0, 0.5, 1]},
+                  "substitution": {"enum": [0, 0.5, 1]}
+                }
+              }
+            }
+          }
         }
       }
     },
