@@ -2,7 +2,7 @@ component: CS-02
 
 name: EcosystemAnalysis
 
-version: 0.1.0
+version: 0.2.0
 
 status: Draft
 
@@ -140,3 +140,61 @@ requirements:
     description: >
       The online-store and PIIT Segovia case studies shall reproduce the
       published results within the tolerances of the golden tests.
+
+  # --- Risk and sensitivity (Part IV, L3, L4) ----------------------------
+
+  - id: REQ-ECO-070
+    description: >
+      Expected risk shall be E[R] = Σ λ_e Δ_e (1 − γ_e)(1 + 𝓘_e) over external
+      components, and providers shall be ranked by their contribution.
+    status: experimental
+
+  - id: REQ-ECO-071
+    description: >
+      Weight uncertainty shall be estimated by Monte Carlo with β drawn from
+      Dirichlet(1, …, 1), reporting mean, p5, p95 and class probabilities, with
+      a fixed seed for reproducibility.
+    status: established
+
+  - id: REQ-ECO-072
+    description: >
+      The engine shall report leave-one-signal-out ICE values and the ICE for a
+      set of thresholds θ.
+
+  - id: REQ-ECO-073
+    description: >
+      The engine shall report E[R] for a set of Katz factors α; the set of the
+      three riskiest providers is expected to be stable across α.
+
+  - id: REQ-ECO-074
+    description: >
+      Redundant groups shall support the β-factor common-cause correction
+      Q_g = Π (1 − β) Q_j + β min Q_j (IEC 61508).
+    status: established
+
+  - id: REQ-ECO-075
+    description: Martin instability I_v = C_e / (C_a + C_e) shall be available per component.
+    status: established
+
+  # --- System files and tooling ------------------------------------------
+
+  - id: REQ-ECO-080
+    description: >
+      Systems shall be loadable from YAML files that follow
+      schemas/ecosystem.schema.json.
+
+  - id: REQ-ECO-081
+    description: >
+      The bundled examples shall reproduce the golden results of the case studies.
+
+  - id: REQ-ECO-082
+    description: >
+      The CLI shall expose `ecosystem analyze <file> [theta=] [alpha=]`.
+
+  - id: REQ-ECO-083
+    description: >
+      scripts/self_analysis.py shall apply the model to the repository itself and
+      report package-level dependency cycles; with --fail-on-cycles it shall exit 1.
+
+  - id: REQ-ECO-084
+    description: Continuous integration shall run the test suite and the self-analysis.
