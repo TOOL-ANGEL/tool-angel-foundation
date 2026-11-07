@@ -197,4 +197,17 @@ requirements:
       report package-level dependency cycles; with --fail-on-cycles it shall exit 1.
 
   - id: REQ-ECO-084
-    description: Continuous integration shall run the test suite and the self-analysis.
+    description: >
+      Continuous integration shall run the test suite and the self-analysis on
+      every supported Python version (3.10–3.14), with schema validation enabled.
+
+  - id: REQ-ECO-085
+    description: >
+      The model shall reject inputs that make operators disagree: duplicate or
+      self dependencies, repeated components in a critical path, and availability
+      on a system without value functions.
+
+  - id: REQ-ECO-086
+    description: >
+      The CLI shall report missing files, invalid YAML, schema violations and
+      unknown options as one-line errors instead of tracebacks.

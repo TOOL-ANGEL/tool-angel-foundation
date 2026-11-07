@@ -111,6 +111,13 @@ errors:
     - "a dependency or path element references an unknown component"
     - "value-function weights do not sum to 1"
     - "α ≥ 1/ρ(D) on a cyclic graph"
+    - "a dependency is duplicated or makes a component depend on itself"
+    - "a component appears more than once in a critical path"
+    - "availability or analyze() is requested on a system without value functions"
+    - "a system file does not follow the schema (when jsonschema is installed)"
+
+notes:
+  - "D in the Katz impact is binary; dependency weights feed Ω and τ only."
 
 out_of_scope_for_0_2_0:
   - empirical calibration of θ, α, β_cc and the ICE thresholds (validation protocol, phases 1–4)

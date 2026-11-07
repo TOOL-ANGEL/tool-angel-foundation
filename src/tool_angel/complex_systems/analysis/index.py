@@ -44,8 +44,9 @@ def signals(
     system: ComplexSystem,
     theta: float = reliability.DEFAULT_THETA,
 ) -> Signals:
-    """Compute s1..s5."""
+    """Compute s1..s5. Validates the system first."""
 
+    system.validate()
     external = system.external_components()
     structural = reliability.structural_dependencies(system, theta)
     n = len(system.components)
@@ -160,10 +161,12 @@ def analyze(
     """
     Validate the system and compute every operator of the model.
 
-    The system is never mutated.
+    The system is never mutated. It needs at least one value function.
     """
 
     system.validate()
+    if not system.value_functions:
+        raise ValueError("ecosystem analysis needs at least one value function")
     values = signals(system, theta)
     score = ice(values, weights)
     return EcosystemReport(

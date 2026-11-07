@@ -7,7 +7,7 @@ Measures how far a system has moved from a closed solution to an ecosystem,
 following the mathematical model of ecosystemic systems (ADR-0002).
 
 ```bash
-pip install numpy pyyaml pytest
+pip install numpy pyyaml pytest jsonschema
 PYTHONPATH=src python -m tool_angel.cli ecosystem analyze examples/piit_segovia.yaml
 python scripts/self_analysis.py        # the model applied to this repository
 python -m pytest -q

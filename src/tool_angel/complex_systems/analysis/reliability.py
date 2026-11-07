@@ -40,8 +40,16 @@ def system_availability(
 ) -> float:
     """
     A_sys = Σ φ_f A_f. ``overrides`` replaces the availability of some components.
+
+    Raises ValueError when the system has no value functions: without F the
+    availability is undefined, and an empty sum would report a system that is
+    down all year.
     """
 
+    if not system.value_functions:
+        raise ValueError(
+            "system availability needs at least one value function (the set F)"
+        )
     availability = {
         component.id: component.availability for component in system.components
     }
