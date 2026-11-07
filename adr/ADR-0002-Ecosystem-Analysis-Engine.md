@@ -8,7 +8,7 @@ Add the Ecosystem Analysis Engine to Complex Systems
 
 ## Status
 
-Proposed
+Accepted (merged in PR #1; extended by CS-02 0.2.0)
 
 ---
 
