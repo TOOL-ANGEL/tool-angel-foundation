@@ -20,8 +20,8 @@ jobs:
         run: pip install numpy pyyaml pytest
       - name: Run tests
         run: python -m pytest -q
-      - name: Self-analysis (CS-02, report only)
-        run: python scripts/self_analysis.py
+      - name: Self-analysis gate (CS-02)
+        run: python scripts/self_analysis.py --fail-on-cycles --strict-instability 0.8
       - name: Analyze bundled examples
         run: |
           PYTHONPATH=src python -m tool_angel.cli ecosystem analyze examples/tienda_online.yaml

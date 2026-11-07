@@ -2,8 +2,8 @@
 AngelOS Runtime Engine.
 """
 
+from tool_angel.builtin_commands.discovery import CommandDiscovery
 from tool_angel.builtin_commands.plugin import PluginCommand
-from tool_angel.commands.discovery import CommandDiscovery
 from tool_angel.commands.dispatcher import CommandDispatcher
 from tool_angel.commands.registry import CommandRegistry
 from tool_angel.plugin_loader.plugin_loader import PluginLoader

@@ -1,5 +1,8 @@
 """
-AngelOS Command Discovery.
+AngelOS built-in command discovery.
+
+Lives in builtin_commands so that the generic commands package never imports
+concrete commands (removes the commands <-> builtin_commands cycle).
 """
 
 from tool_angel.builtin_commands.ecosystem import EcosystemCommand
