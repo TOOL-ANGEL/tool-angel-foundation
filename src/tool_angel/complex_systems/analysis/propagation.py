@@ -104,3 +104,27 @@ def katz_impact(
     propagation = np.linalg.inv(identity - alpha * matrix) - identity
     np.fill_diagonal(propagation, 0.0)
     return {cid: float(propagation[:, k].sum()) for k, cid in enumerate(order)}
+
+
+def instability(system: ComplexSystem) -> dict[UUID, float]:
+    """
+    Martin instability I_v = C_e / (C_a + C_e) (Martin, 2002).
+
+    C_e (efferent): components v depends on. C_a (afferent): components that
+    depend on v. 0 = maximally stable, 1 = maximally unstable; isolated
+    components get 0.
+    """
+
+    efferent = {cid: 0 for cid in system.component_ids()}
+    afferent = {cid: 0 for cid in system.component_ids()}
+    for relationship in system.dependencies():
+        efferent[relationship.source_id] += 1
+        afferent[relationship.target_id] += 1
+    return {
+        cid: (
+            (efferent[cid] / (efferent[cid] + afferent[cid]))
+            if efferent[cid] + afferent[cid]
+            else 0.0
+        )
+        for cid in efferent
+    }
