@@ -2,7 +2,7 @@ component: CS-02
 
 name: EcosystemAnalysis
 
-version: 0.1.0
+version: 0.2.0
 
 status: Draft
 
@@ -58,6 +58,39 @@ interfaces:
       reach: "dict[UUID, int], independent of α"
       katz_impact: "dict[UUID, float] 𝓘_j"
       has_cycles: "bool"
+      instability: "dict[UUID, float] Martin I_v"
+
+  risk:
+    module: tool_angel.complex_systems.analysis.risk
+    functions:
+      provider_risks: "list[ProviderRisk], highest first"
+      expected_risk: "E[R] = Σ λ_e Δ_e (1 − γ_e)(1 + 𝓘_e)"
+
+  sensitivity:
+    module: tool_angel.complex_systems.analysis.sensitivity
+    functions:
+      weight_uncertainty: "ICE mean, p5, p95, class probabilities under β ~ Dirichlet(1)"
+      rank_stability: "share of weightings where system 1 scores higher"
+      leave_one_out: "ICE without each signal"
+      theta_sensitivity: "ICE per θ"
+      alpha_sensitivity: "E[R] per α"
+      common_cause_unavailability: "β-factor Q_g"
+      redundancy_penalty: "Q_g(β) / Q_g(0) per redundant group"
+
+  io:
+    module: tool_angel.complex_systems.io
+    schema: schemas/ecosystem.schema.json
+    functions:
+      system_from_dict: "(ComplexSystem, code → id)"
+      load_system: "(ComplexSystem, code → id, parameters)"
+
+  cli:
+    command: "ecosystem analyze <file> [theta=<float>] [alpha=<float>]"
+    module: tool_angel.builtin_commands.ecosystem
+
+  self_analysis:
+    script: scripts/self_analysis.py
+    options: ["--fail-on-cycles", "--strict-instability <float>"]
 
   index:
     module: tool_angel.complex_systems.analysis.index
@@ -79,8 +112,6 @@ errors:
     - "value-function weights do not sum to 1"
     - "α ≥ 1/ρ(D) on a cyclic graph"
 
-out_of_scope_for_0_1_0:
-  - expected risk E[R] and supplier ranking
-  - Monte Carlo weight sensitivity
-  - common-cause (β-factor) redundancy correction
-  - YAML loader and CLI command
+out_of_scope_for_0_2_0:
+  - empirical calibration of θ, α, β_cc and the ICE thresholds (validation protocol, phases 1–4)
+  - correlated failures beyond the β-factor model
