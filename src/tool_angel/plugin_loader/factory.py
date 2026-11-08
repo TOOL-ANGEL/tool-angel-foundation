@@ -8,6 +8,7 @@ import importlib
 from typing import Any
 
 from tool_angel.exceptions import PluginError
+from tool_angel.plugins.base import BasePlugin
 
 
 class PluginFactory:
@@ -19,7 +20,7 @@ class PluginFactory:
         tool_angel.plugins.weather:WeatherPlugin
     """
 
-    def create(self, entry: str) -> Any:
+    def create(self, entry: str) -> BasePlugin:
         """
         Create a plugin instance from its module and class entry.
 
@@ -31,7 +32,7 @@ class PluginFactory:
 
         Raises:
             PluginError: If the entry is invalid or the plugin
-                cannot be imported or instantiated.
+                cannot be imported, validated or instantiated.
         """
 
         if not isinstance(entry, str) or not entry.strip():
@@ -53,13 +54,13 @@ class PluginFactory:
 
         try:
             module = importlib.import_module(module_name)
-        except (ImportError, ModuleNotFoundError) as exc:
+        except ImportError as exc:
             raise PluginError(
                 f"Could not import plugin module '{module_name}'."
             ) from exc
 
         try:
-            plugin_class = getattr(module, class_name)
+            plugin_class: Any = getattr(module, class_name)
         except AttributeError as exc:
             raise PluginError(
                 f"Plugin class '{class_name}' was not found "
@@ -71,9 +72,16 @@ class PluginFactory:
                 f"Plugin entry '{class_name}' is not a class."
             )
 
+        if not issubclass(plugin_class, BasePlugin):
+            raise PluginError(
+                f"Plugin class '{class_name}' must inherit from BasePlugin."
+            )
+
         try:
-            return plugin_class()
+            plugin = plugin_class()
         except Exception as exc:
             raise PluginError(
                 f"Could not instantiate plugin '{class_name}'."
             ) from exc
+
+        return plugin
